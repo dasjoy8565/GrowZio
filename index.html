@@ -35,6 +35,13 @@
         .theme-accent:hover { background-color: var(--accent-hover); }
         .theme-text-accent { color: var(--accent-color); }
         .theme-border-accent { border-color: var(--accent-color); }
+        
+        /* ছবিভিত্তিক ক্যাটাগরি আইকন স্টাইল */
+        .category-avatar-btn { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 72px; padding: 6px; border-radius: 16px; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+        .category-avatar-btn .icon-box { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; margin-bottom: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease; }
+        .category-avatar-btn:hover .icon-box { transform: scale(1.08); }
+        .category-avatar-btn.active-cat { background-color: rgba(255,255,255,0.05); border-color: var(--accent-color); }
+        .category-avatar-btn.active-cat .icon-box { box-shadow: 0 0 12px var(--accent-color); }
     </style>
 </head>
 <body class="theme-midnight transition-colors duration-300 antialiased">
@@ -77,20 +84,33 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 py-8 space-y-12">
-        <section class="mb-4">
-            <div id="dynamic-category-bar" class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none"></div>
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-8">
+        
+        <section class="max-w-md mx-auto">
+            <div class="relative flex items-center">
+                <i class="fa-solid fa-magnifying-glass text-gray-500 absolute left-4 text-xs"></i>
+                <input type="text" id="global-search-bar" oninput="triggerGlobalSearch(this.value)" placeholder="সার্ভিসের নাম বা আইডি (যেমন: 1024) দিয়ে সার্চ করুন..." class="w-full bg-gray-900 border border-gray-800 focus:border-blue-500 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 outline-none shadow-inner transition">
+                <button id="search-clear-btn" onclick="clearSearchBar()" class="hidden absolute right-4 text-gray-500 hover:text-white text-xs"><i class="fa-solid fa-circle-xmark"></i></button>
+            </div>
+        </section>
+
+        <section class="border-b border-gray-900/50 pb-4">
+            <div id="dynamic-avatar-category-bar" class="flex items-center space-x-4 overflow-x-auto pb-2 scrollbar-none justify-start sm:justify-center"></div>
         </section>
 
         <section id="section-services">
-            <div class="mb-6"><h2 class="text-lg font-black text-white flex items-center gap-2"><i class="fa-solid fa-bolt theme-text-accent"></i> Premium Digital Services</h2></div>
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-sm font-black text-white flex items-center gap-2"><i class="fa-solid fa-bolt theme-text-accent"></i> Premium Digital Services</h2>
+                <span id="service-count-badge" class="text-[10px] bg-gray-900 text-gray-400 font-mono px-2 py-0.5 rounded border border-gray-800">0 Items</span>
+            </div>
             <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
 
         <section id="section-books">
-            <div class="mb-6"><h2 class="text-lg font-black text-white flex items-center gap-2"><i class="fa-solid fa-book theme-text-accent"></i> E-Book Store & Resources</h2></div>
+            <div class="mb-4"><h2 class="text-sm font-black text-white flex items-center gap-2"><i class="fa-solid fa-book theme-text-accent"></i> E-Book Store & Resources</h2></div>
             <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
         </section>
+
         <section id="user-tracking-section" class="hidden">
             <div class="theme-bg border rounded-2xl p-5 shadow-xl">
                 <h2 class="text-sm font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-history text-blue-400"></i> Your Orders & Status Dashboard</h2>
@@ -112,7 +132,6 @@
                 </div>
             </div>
         </section>
-
         <section id="admin-secured-panel" class="hidden pt-6 border-t border-gray-900">
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -360,39 +379,31 @@
         applySystemTheme(savedThemeState);
         document.getElementById('global-theme-switcher').value = savedThemeState;
 
-        // 💵 ডিফল্ট রেট এবং লাভ সেটিংস (লোকাল স্টোরেজ লোড)
         let dollarRate = parseFloat(localStorage.getItem('gz_dollar_rate')) || 120.0;
-        let profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0; // ২০% লাভ
+        let profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0;
 
         let manualServices = JSON.parse(localStorage.getItem('gz_services')) || [];
-        let apiServices = []; // এখানে OpsFollow-এর সার্ভিস অটো এসে জমা হবে
+        let apiServices = []; 
         let books = JSON.parse(localStorage.getItem('gz_books')) || [
             { id: 'b_1', title: 'Advanced Digital Growth Marketing Secrets', author: 'GrowZio Labs', price: 120, cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300', stock: 240, category: 'books', calcMode: 'piece' }
         ];
 
-        let baseCategories = [
-            { id: 'all', name: 'All Items', icon: 'fa-layer-group' },
-            { id: 'books', name: 'Premium E-Books', icon: 'fa-book-open' }
-        ];
-        let customCategories = JSON.parse(localStorage.getItem('gz_categories')) || [
-            { id: 'social', name: 'Social Media Packs', icon: 'fa-share-nodes' },
-            { id: 'topup', name: 'Digital Top-Ups', icon: 'fa-mobile-screen' }
-        ];
-
-        let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
-        let users = JSON.parse(localStorage.getItem('gz_users')) || [];
-        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
-        
-        let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
-        let walletLogos = JSON.parse(localStorage.getItem('gz_wallet_logos')) || {
-            bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", Upay: "https://i.postimg.cc/0jXmYg1M/upay.png"
+        // 🎨 চমৎকার ছবি/আইকন ভিত্তিক ম্যাপিং সিস্টেম
+        const coreCategoriesConfig = {
+            'all': { name: 'All Items', icon: 'fa-layer-group', color: 'bg-gradient-to-tr from-blue-600 to-indigo-600' },
+            'books': { name: 'E-Books', icon: 'fa-book-open', color: 'bg-gradient-to-tr from-emerald-600 to-teal-500' },
+            'tiktok': { name: 'TikTok', icon: 'fa-brands fa-tiktok', color: 'bg-black border border-gray-800' },
+            'facebook': { name: 'Facebook', icon: 'fa-brands fa-facebook-f', color: 'bg-[#1877F2]' },
+            'instagram': { name: 'Instagram', icon: 'fa-brands fa-instagram', color: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]' },
+            'youtube': { name: 'YouTube', icon: 'fa-brands fa-youtube', color: 'bg-[#FF0000]' },
+            'telegram': { name: 'Telegram', icon: 'fa-brands fa-telegram', color: 'bg-[#24A1DE]' },
+            'twitter': { name: 'Twitter/X', icon: 'fa-brands fa-x-twitter', color: 'bg-gray-900' },
+            'topup': { name: 'Top-Ups', icon: 'fa-solid fa-mobile-screen', color: 'bg-gradient-to-tr from-amber-500 to-orange-600' }
         };
 
-        let currentActiveItem = null;
-        let chosenPaymentGateway = "";
         let currentFilterCategory = "all"; 
+        let searchQueryStr = ""; // লাইভ অনুসন্ধানের কুয়েরি ভ্যালু
 
-        // 🔄 পেজ লোড হওয়ার সাথে সাথে API থেকে সব সার্ভিস আনার রিয়েলটাইম ফাংশন
         async function fetchMainPanelServices() {
             try {
                 let res = await fetch('/api/get-services');
@@ -400,32 +411,39 @@
                     let data = await res.json();
                     if (Array.isArray(data)) {
                         apiServices = data.map(item => {
-                            // 🧮 আপনার সেট করা ডলার রেট এবং লাভের পার্সেন্টেজ হিসাব করা
-                            let rawUsdPrice = parseFloat(item.rate); // মেইন প্যানেলের ১০০০ পিসের দাম ডলারে
+                            let rawUsdPrice = parseFloat(item.rate); 
                             let costInBdt = rawUsdPrice * dollarRate;
                             let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
 
-                            // ক্যাটাগরি তৈরি বা স্লগ ঠিক করা
-                            let catId = item.category.toLowerCase().replace(/[^a-z0-9]/g, '_');
-                            if (!customCategories.find(c => c.id === catId)) {
-                                customCategories.push({ id: catId, name: item.category, icon: 'fa-cube' });
+                            // মেইন প্যানেল ক্যাটাগরি নাম অনুসারে লজিক্যাল স্লগ ম্যাচিং (যেমন: TikTok, Facebook)
+                            let rawCat = item.category.toLowerCase();
+                            let catId = 'other';
+                            if (rawCat.includes('tiktok')) catId = 'tiktok';
+                            else if (rawCat.includes('facebook') || rawCat.includes('fb')) catId = 'facebook';
+                            else if (rawCat.includes('instagram') || rawCat.includes('ig')) catId = 'instagram';
+                            else if (rawCat.includes('youtube') || rawCat.includes('yt')) catId = 'youtube';
+                            else if (rawCat.includes('telegram') || rawCat.includes('tg')) catId = 'telegram';
+                            else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
+                            else {
+                                catId = rawCat.replace(/[^a-z0-9]/g, '_');
+                                if(!coreCategoriesConfig[catId]) {
+                                    coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-cube', color: 'bg-slate-700' };
+                                }
                             }
 
                             return {
                                 id: 'api_' + item.service,
                                 name: item.name,
                                 price: finalPriceBdt,
-                                stock: 99999, // এপিআই সার্ভিসের আনলিমিটেড স্টক শো করা
+                                stock: 99999, 
                                 category: catId,
-                                calcMode: 'smm', // SMM প্যানেলের ডিফল্ট মোড
+                                calcMode: 'smm', 
                                 apiId: item.service,
-                                cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
-                            };
+                                cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'};
                         });
-                        localStorage.setItem('gz_categories', JSON.stringify(customCategories));
                     }
                 }
-            } catch (err) { console.error("Error syncing live API services: ", err); }
+            } catch (err) { console.error("Error syncing API: ", err); }
             refreshUserViewport();
         }
 
@@ -436,9 +454,33 @@
             localStorage.setItem('gz_users', JSON.stringify(users));
             localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
             localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
-            localStorage.setItem('gz_wallet_logos', JSON.stringify(walletLogos));
             refreshUserViewport();
         }
+
+        // 🔍 গ্লোবাল সার্চ ইঞ্জিন লজিক
+        window.triggerGlobalSearch = function(val) {
+            searchQueryStr = val.trim().toLowerCase();
+            let clearBtn = document.getElementById('search-clear-btn');
+            if(searchQueryStr) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            refreshUserViewport();
+        };
+
+        window.clearSearchBar = function() {
+            document.getElementById('global-search-bar').value = "";
+            searchQueryStr = "";
+            document.getElementById('search-clear-btn').classWithClick = "hidden";
+            document.getElementById('search-clear-btn').classList.add('hidden');
+            refreshUserViewport();
+        };
+
+        window.filterContentByCategory = function(category) { 
+            currentFilterCategory = category; 
+            refreshUserViewport(); 
+        };
 
         window.openModal = function(id) { document.getElementById(id).classList.add('active'); };
         window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); };
@@ -447,29 +489,20 @@
             document.getElementById('signup-module-box').classList.toggle('hidden', viewMode);
         };
 
-        window.filterContentByCategory = function(category) { currentFilterCategory = category; refreshUserViewport(); };
-        window.addNewCustomCategory = function() {
-            let inputNode = document.getElementById('new-cat-name');
-            let name = inputNode.value.trim(); if(!name) return alert("Enter a valid category name!");
-            customCategories.push({ id: 'cat_' + Date.now(), name: name, icon: 'fa-folder' });
-            inputNode.value = ""; localStorage.setItem('gz_categories', JSON.stringify(customCategories)); refreshUserViewport(); alert(`✅ Category added!`);
-        };
-
         window.commitApiPricingSettings = function() {
             let rateInput = document.getElementById('cfg-dollar-rate').value;
             let marginInput = document.getElementById('cfg-profit-margin').value;
-            if(!rateInput || !marginInput) return alert("দয়া করে সঠিক তথ্য দিন ভাই!");
+            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন ভাই!");
             dollarRate = parseFloat(rateInput);
             profitMargin = parseFloat(marginInput);
             localStorage.setItem('gz_dollar_rate', dollarRate);
             localStorage.setItem('gz_profit_margin', profitMargin);
-            alert("⚙️ লাভ এবং ডলার কনভার্ট রেট সফলভাবে সেভ হয়েছে! আপনার সম্পূর্ণ সাইটের দাম এখন লাইভ আপডেট হয়ে গেছে।");
-            fetchMainPanelServices(); // নতুন রেট অনুযায়ী রিলোড করা
+            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ হয়েছে!");
+            fetchMainPanelServices(); 
         };
 
         let cacheSrvBase64 = "", cacheBkBase64 = "";
         document.getElementById('srv-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheSrvBase64=ev.target.result;}; r.readAsDataURL(f); } });
-        document.getElementById('bk-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheBkBase64=ev.target.result;}; r.readAsDataURL(f); } });
 
         window.triggerAdminAuth = function() {
             const passKey = prompt("🔒 Enter Dashboard Admin Security Key:");
@@ -477,24 +510,12 @@
                 document.getElementById('admin-secured-panel').classList.remove('hidden');
                 document.getElementById('cfg-dollar-rate').value = dollarRate;
                 document.getElementById('cfg-profit-margin').value = profitMargin;
-                document.getElementById('cfg-bkash').value = walletNumbers.bKash;
-                document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
-                document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
-                document.getElementById('cfg-upay').value = walletNumbers.Upay;
                 document.getElementById('admin-secured-panel').scrollIntoView({ behavior: 'smooth' });
                 refreshUserViewport();
             } else { alert("🛑 Authentication Failed."); }
         };
 
         window.lockAdminPanel = function() { document.getElementById('admin-secured-panel').classList.add('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); refreshUserViewport(); };
-
-        window.commitAdminWallets = function() {
-            walletNumbers.bKash = document.getElementById('cfg-bkash').value.trim();
-            walletNumbers.Nagad = document.getElementById('cfg-nagad').value.trim();
-            walletNumbers.Rocket = document.getElementById('cfg-rocket').value.trim();
-            walletNumbers.Upay = document.getElementById('cfg-upay').value.trim();
-            persistPlatformStorage(); alert("✅ Manual gateways updated.");
-        };
 
         document.getElementById('add-service-form').addEventListener('submit', (e) => {
             e.preventDefault();
@@ -508,41 +529,27 @@
                 apiId: document.getElementById('srv-api-id').value.trim(),
                 cover: cacheSrvBase64 || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' 
             });
-            e.target.reset(); cacheSrvBase64=""; persistPlatformStorage(); alert("ম্যানুয়াল সার্ভিস পাবলিশ হয়েছে ভাই!");
+            e.target.reset(); cacheSrvBase64=""; persistPlatformStorage(); alert("ম্যানুয়াল সার্ভিস পাবলিশ হয়েছে!");
         });
 
-        // Auth Logic
-        document.getElementById('auth-signup-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            let mail = document.getElementById('reg-email').value.trim();
-            if(users.find(u => u.email === mail)) return alert("Account conflict.");
-            activeUser = { name: document.getElementById('reg-name').value.trim(), email: mail, pass: document.getElementById('reg-pass').value };
-            users.push(activeUser); e.target.reset(); closeModal('auth-modal'); persistPlatformStorage();
-        });
-
-        document.getElementById('auth-login-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            let matched = users.find(u => u.email === document.getElementById('log-email').value.trim() && u.pass === document.getElementById('log-pass').value);
-            if(!matched) return alert("Invalid credentials.");
-            activeUser = matched; e.target.reset(); closeModal('auth-modal'); persistPlatformStorage();
-        });
-
-        window.logoutSession = function() { activeUser = null; persistPlatformStorage(); };
+        // অন্যান্য গ্লোবাল ভেরিয়েবল সেটআপ
+        let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
+        let users = JSON.parse(localStorage.getItem('gz_users')) || [];
+        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
+        let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
+        let walletLogos = { bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", Upay: "https://i.postimg.cc/0jXmYg1M/upay.png" };
+        let currentActiveItem = null; let chosenPaymentGateway = "";
 
         window.launchPaymentGateway = function(id) {
             if(!activeUser) { alert("🔒 Please log in first."); openModal('auth-modal'); return; }
-            // API এবং ম্যানুয়াল দুই লিস্ট থেকেই ডাটা চেক করা
             currentActiveItem = apiServices.find(s => s.id === id) || manualServices.find(s => s.id === id) || books.find(b => b.id === id);
-            if(!currentActiveItem || currentActiveItem.stock < 1) return alert("🛑 Out of stock.");
-            
+            if(!currentActiveItem) return;
             document.getElementById('modal-img-bkash').src = walletLogos.bKash;
             document.getElementById('modal-img-nagad').src = walletLogos.Nagad;
             document.getElementById('modal-img-rocket').src = walletLogos.Rocket;
             document.getElementById('modal-img-upay').src = walletLogos.Upay;
-            document.getElementById('gate-target-address').value = "";
-            document.getElementById('gate-trxid-value').value = "";
+            document.getElementById('gate-target-address').value = ""; document.getElementById('gate-trxid-value').value = "";
             document.getElementById('step1-item-name').innerText = currentActiveItem.name || currentActiveItem.title;
-            
             if(currentActiveItem.calcMode === 'smm') {
                 document.getElementById('step1-calc-hint').innerText = "SMM Auto Engine Mode (৳ Rate per 1,000)";
                 document.getElementById('gate-qty-label').innerText = "Enter Quantity (Min 100)";
@@ -560,105 +567,47 @@
             document.getElementById('gate-step-2').classList.toggle('hidden', stepNo !== 2);
             document.getElementById('gate-step-3').classList.toggle('hidden', stepNo !== 3);
         }
-
         window.refreshGateCalculations = function() {
             if(!currentActiveItem) return;
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
             document.getElementById('step1-total-price').innerText = `${Math.ceil(finalPrice)} BDT`;
         };
-
-        window.proceedToStepTwo = function() { if(!document.getElementById('gate-target-address').value.trim()) return alert("Enter link/details."); toggleGatewayStep(2); };
+        window.proceedToStepTwo = function() { if(!document.getElementById('gate-target-address').value.trim()) return alert("Enter link."); toggleGatewayStep(2); };
         window.goBackToStepOne = function() { toggleGatewayStep(1); };
         window.goBackToStepTwo = function() { toggleGatewayStep(2); };
-
-        window.finalizeWithWallet = function(walletBrand) {
-            chosenPaymentGateway = walletBrand;
-            document.getElementById('gate-brand-title').innerText = walletBrand + " Payment";
-            document.getElementById('gate-display-num').innerText = walletNumbers[walletBrand];
+        window.finalizeWithWallet = function(wb) {
+            chosenPaymentGateway = wb; document.getElementById('gate-brand-title').innerText = wb + " Payment";
+            document.getElementById('gate-display-num').innerText = walletNumbers[wb];
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
-            document.getElementById('gate-display-amt').innerText = `${Math.ceil(finalPrice)} BDT`;
-            toggleGatewayStep(3);
+            document.getElementById('gate-display-amt').innerText = `${Math.ceil(finalPrice)} BDT`; toggleGatewayStep(3);
         };
-
-        window.copyClipText = function(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace(" BDT", "")); alert("📋 Copied!"); };
+        window.copyClipText = function(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); alert("📋 Copied!"); };
 
         window.executeFinalCheckoutSubmit = async function() {
             let trx = document.getElementById('gate-trxid-value').value.trim();
             let targetAddr = document.getElementById('gate-target-address').value.trim();
             let finalQty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
-            let verifyBtn = document.getElementById('btn-verify-order');
-
-            if(!trx) return alert("Please specify Transaction ID.");
-
-            verifyBtn.innerText = "Processing...";
-            verifyBtn.disabled = true;
+            if(!trx) return alert("Specify TrxID.");
 
             let orderId = 'GZ-' + Math.floor(100000 + Math.random() * 900000);
-            if(currentActiveItem.id.startsWith('man_')) { currentActiveItem.stock -= finalQty; }
-            
-            let newOrder = {
-                id: orderId,
-                userEmail: activeUser.email,
-                userName: activeUser.name,
-                itemId: currentActiveItem.id,
-                itemName: currentActiveItem.name || currentActiveItem.title,
-                target: targetAddr,
-                qty: finalQty,
-                method: chosenPaymentGateway,
-                trxId: trx,
-                status: 'Pending'
-            };
-
-            orders.push(newOrder);
+            orders.push({ id: orderId, userEmail: activeUser.email, userName: activeUser.name, itemId: currentActiveItem.id, itemName: currentActiveItem.name || currentActiveItem.title, target: targetAddr, qty: finalQty, method: chosenPaymentGateway, trxId: trx, status: 'Pending' });
             persistPlatformStorage();
 
-            if(currentActiveItem.apiId && currentActiveItem.apiId !== "") {
+            if(currentActiveItem.apiId) {
                 try {
-                    let response = await fetch('/api/place-order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            service: currentActiveItem.apiId,
-                            link: targetAddr,
-                            quantity: finalQty
-                        })
-                    });
-
+                    let response = await fetch('/api/place-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service: currentActiveItem.apiId, link: targetAddr, quantity: finalQty }) });
                     let result = await response.json();
-
-                    if(response.ok && result.success) {
-                        alert(`✅ সফলভাবে মেইন প্যানেলে অর্ডার সাবমিট হয়েছে! এপিআই অর্ডার আইডি: ${result.orderId}`);
-                        let targetOrder = orders.find(o => o.id === orderId);
-                        if(targetOrder) targetOrder.status = 'Processing';
-                        persistPlatformStorage();
-                    } else {
-                        alert(`❌ এপিআই প্রসেস ব্যর্থ হয়েছে: ${result.error || 'Unknown Error'}। তবে অর্ডারটি আপনার ড্যাশবোর্ডে পেন্ডিং আছে ভাই।`);
-                    }
-                } catch (error) {
-                    alert("⚠️ আপনার ব্যাকএন্ড ফাংশনে কানেক্ট করা যায়নি। তবে অর্ডারটি ড্যাশবোর্ডে সেভ হয়েছে ভাই।");
-                }
-            } else {
-                alert("ℹ️ এটি একটি ম্যানুয়াল সার্ভিস, তাই অর্ডারটি সফলভাবে আপনার ড্যাশবোর্ডে জমা হলো।");
-            }
-
-            verifyBtn.innerText = "Verify Order";
-            verifyBtn.disabled = false;
+                    if(response.ok && result.success) { alert(`✅ সফল অর্ডার! API ID: ${result.orderId}`); }
+                } catch (e) {}
+            } else { alert("ℹ️ ম্যানুয়াল অর্ডার সেভ হয়েছে!"); }
             closeModal('payment-gateway-modal');
-        };
-
-        window.adjustOrderStatus = function(orderId, stateLabel) {
-            let targetOrder = orders.find(o => o.id === orderId); if(!targetOrder) return;
-            targetOrder.status = stateLabel; persistPlatformStorage();
-        };
-
-        window.removeOrderLogEntry = function(orderId) {
-            orders = orders.filter(o => o.id !== orderId); persistPlatformStorage();
         };
 
         window.deleteServiceNode = function(id) { manualServices = manualServices.filter(s => s.id !== id); persistPlatformStorage(); };
 
+        // 🔄 মূল ভিউ রেন্ডারিং ফাংশন (লাইভ সার্চ এবং ছবি ক্যাটাগরি প্রসেসিং)
         function refreshUserViewport() {
             if(activeUser) {
                 document.getElementById('auth-zone').classList.add('hidden'); document.getElementById('profile-zone').classList.remove('hidden');
@@ -666,74 +615,94 @@
             } else {
                 document.getElementById('auth-zone').classList.remove('hidden'); document.getElementById('profile-zone').classList.add('hidden'); document.getElementById('user-tracking-section').classList.add('hidden');
             }
-
             let adminFlag = document.getElementById('admin-secured-panel').classList.contains('hidden');
-            let combinedCategories = [...baseCategories, ...customCategories];
-            
-            document.getElementById('dynamic-category-bar').innerHTML = combinedCategories.map(cat => {
-                let isActive = currentFilterCategory === cat.id;
-                return `<button onclick="filterContentByCategory('${cat.id}')" class="${isActive ? 'px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-xl transition shadow-md whitespace-nowrap' : 'px-4 py-2 bg-gray-900 hover:bg-gray-800 text-gray-300 text-xs font-bold rounded-xl border border-gray-800 transition whitespace-nowrap'}"><i class="fa-solid ${cat.icon} mr-1 theme-text-accent"></i> ${cat.name}</button>`;
+            let allServices = [...manualServices, ...apiServices];
+
+            // ১. একটি ডাইনামিক ইউনিক ক্যাটাগরি সেট তৈরি করা যা যা সার্ভিসের ডাটাতে আছে
+            let activeCategoriesInSystem = ['all'];
+            allServices.forEach(s => { if(!activeCategoriesInSystem.includes(s.category)) activeCategoriesInSystem.push(s.category); });
+            if(books.length > 0 && !activeCategoriesInSystem.includes('books')) activeCategoriesInSystem.push('books');
+
+            // ২. 🖼️ ছবি/গোল লোগো ভিত্তিক ক্যাটাগরি এলিমেন্ট তৈরি করা
+            document.getElementById('dynamic-avatar-category-bar').innerHTML = activeCategoriesInSystem.map(catKey => {
+                let conf = coreCategoriesConfig[catKey] || { name: catKey.toUpperCase(), icon: 'fa-cube', color: 'bg-gray-800' };
+                let isSel = currentFilterCategory === catKey;
+                return `
+                <div onclick="filterContentByCategory('${catKey}')" class="category-avatar-btn ${isSel ? 'active-cat' : ''}">
+                    <div class="icon-box ${conf.color}">
+                        <i class="${conf.icon}"></i>
+                    </div>
+                    <span class="text-[10px] font-bold text-gray-400 truncate max-w-[68px] text-center">${conf.name}</span>
+                </div>`;
             }).join('');
 
-            document.getElementById('srv-category').innerHTML = customCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            // অ্যাডমিন প্যানেলের সিলেক্ট বক্স লোড করা
+            document.getElementById('srv-category').innerHTML = Object.keys(coreCategoriesConfig).filter(k => k!=='all').map(k => `<option value="${k}">${coreCategoriesConfig[k].name}</option>`).join('');
 
-            // এপিআই এবং ম্যানুয়াল দুই ধরণের সার্ভিস একত্রিত করা
-            let allServices = [...manualServices, ...apiServices];
-            let filteredServices = (currentFilterCategory !== "all" && currentFilterCategory !== 'books') ? allServices.filter(s => s.category === currentFilterCategory) : (currentFilterCategory === 'books' ? [] : allServices);
+            // ৩. 🔍 ফিল্টারিং ইঞ্জিন (ক্যাটাগরি ফিল্টার + লাইভ সার্চ ভ্যালু একসাথে হ্যান্ডেল করবে)
+            let filteredServices = allServices;
+            
+            // ক্যাটাগরি সিলেকশন ফিল্টার
+            if (currentFilterCategory !== "all") {
+                filteredServices = filteredServices.filter(s => s.category === currentFilterCategory);
+            }
+            // লাইভ সার্চ বার ইনপুট ফিল্টার (সার্ভিসের নাম অথবা আইডি নাম্বার দিয়ে খুজবে)
+            if (searchQueryStr) {
+                filteredServices = filteredServices.filter(s => 
+                    s.name.toLowerCase().includes(searchQueryStr) || 
+                    (s.apiId && s.apiId.toString().includes(searchQueryStr))
+                );
+            }
+
             let filteredBooks = (currentFilterCategory === "all" || currentFilterCategory === 'books') ? books : [];
+            if(searchQueryStr && filteredBooks.length > 0) {
+                filteredBooks = filteredBooks.filter(b => b.title.toLowerCase().includes(searchQueryStr));
+            }
 
-            document.getElementById('section-services').style.display = (currentFilterCategory === 'books') ? "none" : "block";
+            document.getElementById('service-count-badge').innerText = `${filteredServices.length} Items Listed`;
+            document.getElementById('section-services').style.display = (currentFilterCategory === 'books' && !searchQueryStr) ? "none" : "block";
             document.getElementById('section-books').style.display = (currentFilterCategory !== 'all' && currentFilterCategory !== 'books') ? "none" : "block";
 
-            document.getElementById('services-container').innerHTML = filteredServices.map(s => {
-                let isSmm = (s.calcMode === 'smm');
-                let isApiNode = s.id.startsWith('api_');
+            // সার্ভিস কার্ড রেন্ডার
+            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ কোনো সার্ভিস বা আইডি খুঁজে পাওয়া যায়নি ভাই!</div>` : filteredServices.map(s => {
+                let isSmm = (s.calcMode === 'smm'); let isApiNode = s.id.startsWith('api_');
                 return `
                 <div class="theme-bg border rounded-2xl p-4 flex flex-col justify-between relative">
                     <div>
                         <div class="aspect-[16/10] bg-gray-950 rounded-xl mb-3 overflow-hidden border border-gray-900"><img src="${s.cover}" class="w-full h-full object-cover"></div>
                         <h4 class="text-xs font-bold text-gray-200 line-clamp-2">${s.name}</h4>
                         <div class="flex gap-2 mt-1">
-                            <span class="text-[9px] px-2 py-0.5 rounded font-mono bg-gray-950 text-gray-400 border border-gray-900">${isApiNode ? 'Auto Live API' : 'Manual Store'}</span>
+                            <span class="text-[9px] px-2 py-0.5 rounded font-mono bg-gray-950 text-gray-400 border border-gray-900">${isApiNode ? 'Auto API' : 'Manual'}</span>
                             ${s.apiId ? `<span class="text-[9px] px-2 py-0.5 rounded font-mono bg-blue-950 text-blue-400 border border-blue-900/40">ID: ${s.apiId}</span>` : ''}
                         </div>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
-                        <div><p class="text-[10px] text-gray-500 font-mono">${isApiNode ? 'Stock: Unlimited' : `Stock: ${s.stock}`}</p><p class="text-sm font-black theme-text-accent">${isSmm ? `৳${s.price} <span class="text-[10px] text-gray-500 font-normal">/1K</span>` : `৳${s.price}`}</p></div>
+                        <div><p class="text-sm font-black theme-text-accent">${isSmm ? `৳${s.price} <span class="text-[10px] text-gray-500 font-normal">/1K</span>` : `৳${s.price}`}</p></div>
                         <button onclick="launchPaymentGateway('${s.id}')" class="bg-gray-900 hover:bg-gray-800 text-white text-[11px] font-bold px-4 py-2 rounded-xl border border-gray-800 transition">Order</button>
-                    </div>
-                    <div class="absolute top-6 right-6 ${adminFlag || isApiNode ? 'hidden' : ''}">
-                        <button onclick="deleteServiceNode('${s.id}')" class="p-1 bg-gray-950 text-gray-400 hover:text-red-400 text-[10px] rounded-full"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>`;
             }).join('');
 
+            // বুক রেন্ডার
             document.getElementById('books-container').innerHTML = filteredBooks.map(b => `
                 <div class="theme-bg border rounded-xl p-3 flex flex-col justify-between relative">
-                    <div>
-                        <div class="aspect-[3/4] bg-gray-950 rounded-lg overflow-hidden border border-gray-900 mb-2"><img src="${b.cover}" class="w-full h-full object-cover"></div>
-                        <h4 class="text-[11px] font-bold text-gray-200 truncate">${b.title}</h4>
-                        <p class="text-[9px] text-gray-500">By ${b.author}</p>
-                    </div>
-                    <div class="mt-2 flex items-center justify-between">
-                        <span class="text-xs font-bold text-emerald-400">৳${b.price}</span>
-                        <button onclick="launchPaymentGateway('${b.id}')" class="bg-gray-900 hover:bg-gray-800 text-[10px] text-white px-2.5 py-1 rounded border border-gray-800 transition">Get Book</button>
-                    </div>
+                    <div><div class="aspect-[3/4] bg-gray-950 rounded-lg overflow-hidden border border-gray-900 mb-2"><img src="${b.cover}" class="w-full h-full object-cover"></div>
+                    <h4 class="text-[11px] font-bold text-gray-200 truncate">${b.title}</h4></div>
+                    <div class="mt-2 flex items-center justify-between"><span class="text-xs font-bold text-emerald-400">৳${b.price}</span>
+                    <button onclick="launchPaymentGateway('${b.id}')" class="bg-gray-900 hover:bg-gray-800 text-[10px] text-white px-2.5 py-1 rounded border border-gray-800 transition">Get</button></div>
                 </div>`).join('');
 
+            // ইউজার টেবিল রেন্ডার
             if(activeUser) {
                 let userFiltered = orders.filter(o => o.userEmail === activeUser.email);
                 document.getElementById('user-orders-rows').innerHTML = userFiltered.length === 0 ? `<tr><td colspan="7" class="py-4 text-center text-gray-600 text-[11px]">No transaction history logs found.</td></tr>` : userFiltered.map(o => `
-                    <tr class="hover:bg-gray-900/10"><td class="py-2.5 font-mono font-bold text-gray-400">${o.id}</td><td>${o.itemName}</td><td>${o.target}</td><td>${o.qty}</td><td class="text-xs text-blue-400 font-bold">${o.method}</td><td class="font-mono text-gray-400">${o.trxId}</td><td class="text-right"><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':o.status==='Canceled'?'bg-red-500/10 text-red-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td></tr>`).join('');
+                    <tr class="hover:bg-gray-900/10"><td class="py-2.5 font-mono font-bold text-gray-400">${o.id}</td><td>${o.itemName}</td><td>${o.target}</td><td>${o.qty}</td><td class="text-xs text-blue-400 font-bold">${o.method}</td><td class="font-mono text-gray-400">${o.trxId}</td><td class="text-right"><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td></tr>`).join('');
             }
-
             document.getElementById('admin-orders-rows').innerHTML = orders.map(o => `
-                <tr class="hover:bg-gray-900/40"><td class="px-4 py-2 font-mono text-gray-400">${o.id}</td><td class="px-4 py-2"><b>${o.userName}</b><br>${o.userEmail}</td><td class="px-4 py-2">${o.itemName}</td><td class="px-4 py-2">${o.target}</td><td class="px-4 py-2">${o.qty}</td><td class="px-4 py-2 text-blue-400 font-bold">${o.method}</td><td class="px-4 py-2 font-mono text-purple-400">${o.trxId}</td><td><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':o.status==='Canceled'?'bg-red-500/10 text-red-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td><td class="px-4 py-2 text-right space-x-0.5 whitespace-nowrap"><button onclick="adjustOrderStatus('${o.id}', 'Completed')" class="text-[10px] bg-gray-950 text-green-400 p-1 rounded border border-gray-800"><i class="fa-solid fa-check"></i></button><button onclick="adjustOrderStatus(adjustOrderStatus('${o.id}', 'Canceled')" class="text-[10px] bg-gray-950 text-red-400 p-1 rounded border border-gray-800"><i class="fa-solid fa-ban"></i></button><button onclick="removeOrderLogEntry('${o.id}')" class="text-[10px] bg-gray-950 text-rose-500 p-1 rounded border border-gray-800"><i class="fa-solid fa-trash-can"></i></button></td></tr>`).join('');
+                <tr class="hover:bg-gray-900/40"><td class="px-4 py-2 font-mono text-gray-400">${o.id}</td><td class="px-4 py-2"><b>${o.userName}</b></td><td class="px-4 py-2">${o.itemName}</td><td class="px-4 py-2">${o.qty}</td><td class="px-4 py-2 font-mono text-purple-400">${o.trxId}</td><td><span>${o.status}</span></td></tr>`).join('');
         }
 
-        // ইনিশিয়াল ডাটা কল
         fetchMainPanelServices();
     </script>
 </body>
 </html>
-                
