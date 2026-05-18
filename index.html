@@ -7,6 +7,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        // 🔥 আপনার দেওয়া Firebase কনফিগারেশন এখানে সফলভাবে যুক্ত করা হয়েছে:
+        const firebaseConfig = {
+            apiKey: "AIzaSyBDPXacwh3IX5f8Zaf3ql8OWseVRE_-5XQ",
+            authDomain: "growzio-38230.firebaseapp.com",
+            databaseURL: "https://growzio-38230-default-rtdb.firebaseio.com",
+            projectId: "growzio-38230",
+            storageBucket: "growzio-38230.firebasestorage.app",
+            messagingSenderId: "12102893932",
+            appId: "1:12102893932:web:9680b367ee51ca405f7349",
+            measurementId: "G-48ZSF34LL8"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.database();
+    </script>
+    
     <style>
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #090d16; }
@@ -88,7 +111,7 @@
         <section class="max-w-md mx-auto">
             <div class="relative flex items-center">
                 <i class="fa-solid fa-magnifying-glass text-gray-500 absolute left-4 text-xs"></i>
-                <input type="text" id="global-search-bar" oninput="triggerGlobalSearch(this.value)" placeholder="সার্ভিসের নাম বা আইডি (যেমন: 1024) দিয়ে সার্চ করুন..." class="w-full bg-gray-900 border border-gray-800 focus:border-blue-500 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 outline-none shadow-inner transition">
+                <input type="text" id="global-search-bar" oninput="triggerGlobalSearch(this.value)" placeholder="সার্ভিসের নাম বা আইডি দিয়ে সার্চ করুন..." class="w-full bg-gray-900 border border-gray-800 focus:border-blue-500 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-gray-500 outline-none shadow-inner transition">
                 <button id="search-clear-btn" onclick="clearSearchBar()" class="hidden absolute right-4 text-gray-500 hover:text-white text-xs"><i class="fa-solid fa-circle-xmark"></i></button>
             </div>
         </section>
@@ -156,30 +179,26 @@
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
-                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-wallet text-pink-500 mr-1"></i> Gateway Dynamic Numbers & Custom Logos</h3>
+                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-wallet text-pink-500 mr-1"></i> Gateway Dynamic Numbers</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-pink-500">bKash Channel:</label>
                         <input type="text" id="cfg-bkash" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-bkash-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-orange-500">Nagad Channel:</label>
                         <input type="text" id="cfg-nagad" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-nagad-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-purple-400">Rocket Channel:</label>
                         <input type="text" id="cfg-rocket" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-rocket-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-blue-400">Upay Channel:</label>
                         <input type="text" id="cfg-upay" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-upay-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                 </div>
-                <button onclick="commitAdminWallets()" class="mt-3 theme-accent text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save Gateways & Images</button>
+                <button onclick="commitAdminWallets()" class="mt-3 theme-accent text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save Gateways</button>
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
@@ -207,7 +226,7 @@
                             </select>
                         </div>
                         <input type="text" id="srv-api-id" placeholder="Main Panel Service ID (ফাঁকা রাখলে ম্যানুয়াল থাকবে)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
-                        <input type="file" id="srv-img" accept="image/*" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-1.5 text-xs text-gray-500">
+                        <input type="text" id="srv-img" placeholder="Image URL" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none">
                         <button type="submit" class="w-full theme-accent text-white text-xs font-bold py-2 rounded-lg transition">Publish Custom Item</button>
                     </form>
                 </div>
@@ -221,7 +240,7 @@
                             <input type="number" id="bk-price" placeholder="Price (BDT)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
                             <input type="number" id="bk-stock" placeholder="Stock" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
                         </div>
-                        <input type="file" id="bk-img" accept="image/*" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-1.5 text-xs text-gray-500">
+                        <input type="text" id="bk-img" placeholder="Book Image URL" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none">
                         <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 rounded-lg transition">Publish E-Book</button>
                     </form>
                 </div>
@@ -379,15 +398,17 @@
         applySystemTheme(savedThemeState);
         document.getElementById('global-theme-switcher').value = savedThemeState;
 
-        // LIVE PRICING SYNCHRONIZER ENGINE (LOCAL STORAGE BROADCAST & RE-VALIDATOR)
-        let dollarRate = parseFloat(localStorage.getItem('gz_dollar_rate')) || 120.0;
-        let profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0;
-
-        let manualServices = JSON.parse(localStorage.getItem('gz_services')) || [];
+        // Firebase-linked System State Variables
+        let dollarRate = 120.0;
+        let profitMargin = 20.0;
+        let manualServices = [];
         let apiServices = []; 
-        let books = JSON.parse(localStorage.getItem('gz_books')) || [
-            { id: 'b_1', title: 'Advanced Digital Growth Marketing Secrets', author: 'GrowZio Labs', price: 120, cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300', stock: 240, category: 'books', calcMode: 'piece' }
-        ];
+        let books = [];
+        let orders = [];
+        let activeUser = null;
+        let walletNumbers = { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
+        let walletLogos = { bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", Upay: "https://i.postimg.cc/0jXmYg1M/upay.png" };
+        let currentActiveItem = null; let chosenPaymentGateway = "";
 
         const coreCategoriesConfig = {
             'all': { name: 'All Items', icon: 'fa-layer-group', color: 'bg-gradient-to-tr from-blue-600 to-indigo-600' },
@@ -402,23 +423,78 @@
         };
 
         let currentFilterCategory = "all"; 
-        let searchQueryStr = ""; 
+        let searchQueryStr = "";
+
+        // 🔗 Realtime Firebase Syncer Engine
+        function syncFirebaseDataEngine() {
+            // Settings Sync (Dollar & Margin)
+            db.ref('settings').on('value', snapshot => {
+                const data = snapshot.val();
+                if(data) {
+                    dollarRate = parseFloat(data.dollarRate) || 120.0;
+                    profitMargin = parseFloat(data.profitMargin) || 20.0;
+                    document.getElementById('cfg-dollar-rate').value = dollarRate;
+                    document.getElementById('cfg-profit-margin').value = profitMargin;
+                }
+            });
+
+            // Wallets Sync
+            db.ref('wallets').on('value', snapshot => {
+                const wData = snapshot.val();
+                if(wData) {
+                    walletNumbers = wData;
+                    document.getElementById('cfg-bkash').value = walletNumbers.bKash || "";
+                    document.getElementById('cfg-nagad').value = walletNumbers.Nagad || "";
+                    document.getElementById('cfg-rocket').value = walletNumbers.Rocket || "";
+                    document.getElementById('cfg-upay').value = walletNumbers.Upay || "";
+                }
+            });
+
+            // Services Sync
+            db.ref('services').on('value', snapshot => {
+                const sData = snapshot.val();
+                manualServices = sData ? Object.values(sData) : [];
+                refreshUserViewport();
+            });
+
+            // Books Sync
+            db.ref('books').on('value', snapshot => {
+                const bData = snapshot.val();
+                books = bData ? Object.values(bData) : [];
+                refreshUserViewport();
+            });
+
+            // Orders Sync
+            db.ref('orders').on('value', snapshot => {
+                const oData = snapshot.val();
+                orders = oData ? Object.values(oData) : [];
+                refreshUserViewport();
+            });
+        }
+
+        // Auth Tracking
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                db.ref('users/' + user.uid).once('value', snap => {
+                    const profile = snap.val();
+                    activeUser = { uid: user.uid, email: user.email, name: profile ? profile.name : 'User' };
+                    refreshUserViewport();
+                });
+            } else {
+                activeUser = null;
+                refreshUserViewport();
+            }
+        });
 
         async function fetchMainPanelServices() {
-            // Live synchronizing parameters read dynamically
-            dollarRate = parseFloat(localStorage.getItem('gz_dollar_rate')) || 120.0;
-            profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0;
-
             try {
                 let res = await fetch('/api/get-services');
                 if (res.ok) {
                     let data = await res.json();
                     if (Array.isArray(data)) {
                         apiServices = data.map(item => {
-                            let rawUsdPrice = parseFloat(item.rate); 
-                            let costInBdt = rawUsdPrice * dollarRate;
+                            let costInBdt = parseFloat(item.rate) * dollarRate;
                             let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
-
                             let rawCat = item.category.toLowerCase();
                             let catId = 'other';
                             if (rawCat.includes('tiktok')) catId = 'tiktok';
@@ -429,107 +505,53 @@
                             else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
                             else {
                                 catId = rawCat.replace(/[^a-z0-9]/g, '_');
-                                if(!coreCategoriesConfig[catId]) {
-                                    coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-cube', color: 'bg-slate-700' };
-                                }
+                                if(!coreCategoriesConfig[catId]) coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-cube', color: 'bg-slate-700' };
                             }
-
                             return {
-                                id: 'api_' + item.service,
-                                name: item.name,
-                                price: finalPriceBdt,
-                                stock: 99999, 
-                                category: catId,
-                                calcMode: 'smm', 
-                                apiId: item.service,
+                                id: 'api_' + item.service, name: item.name, price: finalPriceBdt, stock: 99999, category: catId, calcMode: 'smm', apiId: item.service,
                                 cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
                             };
                         });
                     }
                 }
-            } catch (err) { console.error("Error syncing API: ", err); }
+            } catch (err) { console.error(err); }
             refreshUserViewport();
         }
 
-        // WALLETS IMAGE UPLOADS AND BASE64 CORE CONVERTERS
-        let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
-        let walletLogos = JSON.parse(localStorage.getItem('gz_wallet_logos')) || { 
-            bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", 
-            Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", 
-            Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", 
-            Upay: "https://i.postimg.cc/0jXmYg1M/upay.png" 
-        };
+        // Authentication Submission Logic
+        document.getElementById('auth-signup-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const pass = document.getElementById('reg-pass').value;
 
-        let cacheBkashImg = walletLogos.bKash, cacheNagadImg = walletLogos.Nagad, cacheRocketImg = walletLogos.Rocket, cacheUpayImg = walletLogos.Upay;
-
-        // Event listeners handling image files converting straight to Base64
-        document.getElementById('cfg-bkash-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheBkashImg = b64; }); });
-        document.getElementById('cfg-nagad-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheNagadImg = b64; }); });
-        document.getElementById('cfg-rocket-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheRocketImg = b64; }); });
-        document.getElementById('cfg-upay-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheUpayImg = b64; }); });
-
-        function readLogoFile(file, callback) {
-            if(!file) return;
-            let reader = new FileReader();
-            reader.onload = function(evt) { callback(evt.target.result); };
-            reader.readAsDataURL(file);
-        }
-
-        window.commitAdminWallets = function() {
-            walletNumbers.bKash = document.getElementById('cfg-bkash').value.trim();
-            walletNumbers.Nagad = document.getElementById('cfg-nagad').value.trim();
-            walletNumbers.Rocket = document.getElementById('cfg-rocket').value.trim();
-            walletNumbers.Upay = document.getElementById('cfg-upay').value.trim();
-
-            walletLogos.bKash = cacheBkashImg;
-            walletLogos.Nagad = cacheNagadImg;
-            walletLogos.Rocket = cacheRocketImg;
-            walletLogos.Upay = cacheUpayImg;
-
-            localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
-            localStorage.setItem('gz_wallet_logos', JSON.stringify(walletLogos));
-            
-            // Instantly notifies all tabs/users on the network of systemic adjustments
-            localStorage.setItem('gz_live_ping', Date.now());
-            alert("✅ Gateways numbers and images updated successfully!");
-            refreshUserViewport();
-        };
-
-        // GLOBAL PRICING REALTIME COMMIT METHOD
-        window.commitApiPricingSettings = function() {
-            let rateInput = document.getElementById('cfg-dollar-rate').value;
-            let marginInput = document.getElementById('cfg-profit-margin').value;
-            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন ভাই!");
-            
-            localStorage.setItem('gz_dollar_rate', parseFloat(rateInput));
-            localStorage.setItem('gz_profit_margin', parseFloat(marginInput));
-            localStorage.setItem('gz_live_ping', Date.now()); // Real-time pulse trigger
-            
-            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ হয়েছে!");
-            fetchMainPanelServices(); 
-        };
-
-        // WINDOW CROSS-TAB LISTENER FOR MULTIUSER SECONDS SYNC
-        window.addEventListener('storage', function(e) {
-            if(e.key === 'gz_live_ping' || e.key === 'gz_dollar_rate' || e.key === 'gz_profit_margin' || e.key === 'gz_wallet_logos') {
-                fetchMainPanelServices();
-            }
+            auth.createUserWithEmailAndPassword(email, pass)
+                .then(cred => {
+                    db.ref('users/' + cred.user.uid).set({ name: name, email: email });
+                    alert("🥳 Registration successfully completed!");
+                    closeModal('auth-modal');
+                }).catch(err => alert(err.message));
         });
 
-        function persistPlatformStorage() {
-            localStorage.setItem('gz_services', JSON.stringify(manualServices));
-            localStorage.setItem('gz_books', JSON.stringify(books));
-            localStorage.setItem('gz_orders', JSON.stringify(orders));
-            localStorage.setItem('gz_users', JSON.stringify(users));
-            localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
-            refreshUserViewport();
-        }
+        document.getElementById('auth-login-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const email = document.getElementById('log-email').value.trim();
+            const pass = document.getElementById('log-pass').value;
+
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => {
+                    alert("⚡ Successfully logged in!");
+                    closeModal('auth-modal');
+                }).catch(err => alert(err.message));
+        });
+
+        window.logoutSession = function() {
+            auth.signOut().then(() => alert("Logged out cleanly."));
+        };
 
         window.triggerGlobalSearch = function(val) {
             searchQueryStr = val.trim().toLowerCase();
-            let clearBtn = document.getElementById('search-clear-btn');
-            if(searchQueryStr) clearBtn.classList.remove('hidden');
-            else clearBtn.classList.add('hidden');
+            document.getElementById('search-clear-btn').classList.toggle('hidden', !searchQueryStr);
             refreshUserViewport();
         };
 
@@ -552,60 +574,72 @@
             document.getElementById('signup-module-box').classList.toggle('hidden', viewMode);
         };
 
-        let cacheSrvBase64 = "";
-        document.getElementById('srv-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheSrvBase64=ev.target.result;}; r.readAsDataURL(f); } });
-
-        window.triggerAdminAuth = function() {
-            const passKey = prompt("🔒 Enter Dashboard Admin Security Key:");
-            if (passKey === "1357") { 
-                document.getElementById('admin-secured-panel').classList.remove('hidden');
-                document.getElementById('cfg-dollar-rate').value = localStorage.getItem('gz_dollar_rate') || dollarRate;
-                document.getElementById('cfg-profit-margin').value = localStorage.getItem('gz_profit_margin') || profitMargin;
-                
-                document.getElementById('cfg-bkash').value = walletNumbers.bKash;
-                document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
-                document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
-                document.getElementById('cfg-upay').value = walletNumbers.Upay;
-
-                document.getElementById('admin-secured-panel').scrollIntoView({ behavior: 'smooth' });
-                refreshUserViewport();
-            } else { alert("🛑 Authentication Failed."); }
+        window.commitApiPricingSettings = function() {
+            let r = document.getElementById('cfg-dollar-rate').value;
+            let m = document.getElementById('cfg-profit-margin').value;
+            if(!r || !m) return alert("All fields required.");
+            db.ref('settings').set({ dollarRate: parseFloat(r), profitMargin: parseFloat(m) })
+                .then(() => { alert("⚙️ Pricing Configurations Synced to Cloud DB!"); fetchMainPanelServices(); });
         };
 
-        window.lockAdminPanel = function() { document.getElementById('admin-secured-panel').classList.add('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); refreshUserViewport(); };
+        window.commitAdminWallets = function() {
+            const upW = {
+                bKash: document.getElementById('cfg-bkash').value.trim(),
+                Nagad: document.getElementById('cfg-nagad').value.trim(),
+                Rocket: document.getElementById('cfg-rocket').value.trim(),
+                Upay: document.getElementById('cfg-upay').value.trim()
+            };
+            db.ref('wallets').set(upW).then(() => alert("Wallets synchronized successfully."));
+        };
 
-        document.getElementById('add-service-form').addEventListener('submit', (e) => {
+        window.addNewCustomCategory = function() {
+            let catName = document.getElementById('new-cat-name').value.trim();
+            if(!catName) return alert("Enter category title.");
+            let slug = catName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            coreCategoriesConfig[slug] = { name: catName, icon: 'fa-cube', color: 'bg-slate-700' };
+            document.getElementById('new-cat-name').value = "";
+            refreshUserViewport();
+        };
+
+        document.getElementById('add-service-form').addEventListener('submit', e => {
             e.preventDefault();
-            manualServices.push({ 
-                id: 'man_' + Date.now(), 
-                name: document.getElementById('srv-title').value.trim(), 
-                price: parseFloat(document.getElementById('srv-price').value), 
-                stock: parseInt(document.getElementById('srv-stock').value), 
+            const sId = 'man_' + Date.now();
+            const payload = {
+                id: sId,
+                name: document.getElementById('srv-title').value.trim(),
+                price: parseFloat(document.getElementById('srv-price').value),
+                stock: parseInt(document.getElementById('srv-stock').value),
                 category: document.getElementById('srv-category').value,
                 calcMode: document.getElementById('srv-calc-mode').value,
                 apiId: document.getElementById('srv-api-id').value.trim(),
-                cover: cacheSrvBase64 || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' 
-            });
-            e.target.reset(); cacheSrvBase64=""; persistPlatformStorage(); alert("ম্যানুয়াল সার্ভিস পাবলিশ হয়েছে!");
+                cover: document.getElementById('srv-img').value.trim() || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
+            };
+            db.ref('services/' + sId).set(payload).then(() => { e.target.reset(); alert("Published custom service!"); });
         });
 
-        let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
-        let users = JSON.parse(localStorage.getItem('gz_users')) || [];
-        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
-        let currentActiveItem = null; let chosenPaymentGateway = "";
+        document.getElementById('add-book-form').addEventListener('submit', e => {
+            e.preventDefault();
+            const bId = 'bk_' + Date.now();
+            const payload = {
+                id: bId,
+                title: document.getElementById('bk-title').value.trim(),
+                author: document.getElementById('bk-author').value.trim(),
+                price: parseFloat(document.getElementById('bk-price').value),
+                stock: parseInt(document.getElementById('bk-stock').value),
+                category: 'books', calcMode: 'piece',
+                cover: document.getElementById('bk-img').value.trim() || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300'
+            };
+            db.ref('books/' + bId).set(payload).then(() => { e.target.reset(); alert("Published custom book module!"); });
+        });
 
         window.launchPaymentGateway = function(id) {
             if(!activeUser) { alert("🔒 Please log in first."); openModal('auth-modal'); return; }
             currentActiveItem = apiServices.find(s => s.id === id) || manualServices.find(s => s.id === id) || books.find(b => b.id === id);
             if(!currentActiveItem) return;
-            
-            // Local dynamic images mapping onto UI elements safely
-            let activeLogos = JSON.parse(localStorage.getItem('gz_wallet_logos')) || walletLogos;
-            document.getElementById('modal-img-bkash').src = activeLogos.bKash;
-            document.getElementById('modal-img-nagad').src = activeLogos.Nagad;
-            document.getElementById('modal-img-rocket').src = activeLogos.Rocket;
-            document.getElementById('modal-img-upay').src = activeLogos.Upay;
-            
+            document.getElementById('modal-img-bkash').src = walletLogos.bKash;
+            document.getElementById('modal-img-nagad').src = walletLogos.Nagad;
+            document.getElementById('modal-img-rocket').src = walletLogos.Rocket;
+            document.getElementById('modal-img-upay').src = walletLogos.Upay;
             document.getElementById('gate-target-address').value = ""; document.getElementById('gate-trxid-value').value = "";
             document.getElementById('step1-item-name').innerText = currentActiveItem.name || currentActiveItem.title;
             if(currentActiveItem.calcMode === 'smm') {
@@ -625,48 +659,61 @@
             document.getElementById('gate-step-2').classList.toggle('hidden', stepNo !== 2);
             document.getElementById('gate-step-3').classList.toggle('hidden', stepNo !== 3);
         }
+
         window.refreshGateCalculations = function() {
             if(!currentActiveItem) return;
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
             document.getElementById('step1-total-price').innerText = `${Math.ceil(finalPrice)} BDT`;
         };
-        window.proceedToStepTwo = function() { if(!document.getElementById('gate-target-address').value.trim()) return alert("Enter link."); toggleGatewayStep(2); };
+
+        window.proceedToStepTwo = function() { if(!document.getElementById('gate-target-address').value.trim()) return alert("Enter dynamic handle link."); toggleGatewayStep(2); };
         window.goBackToStepOne = function() { toggleGatewayStep(1); };
         window.goBackToStepTwo = function() { toggleGatewayStep(2); };
+
         window.finalizeWithWallet = function(wb) {
-            chosenPaymentGateway = wb; document.getElementById('gate-brand-title').innerText = wb + " Payment";
-            
-            let currentNums = JSON.parse(localStorage.getItem('gz_wallets')) || walletNumbers;
-            document.getElementById('gate-display-num').innerText = currentNums[wb];
-            
+            chosenPaymentGateway = wb; document.getElementById('gate-brand-title').innerText = wb + " Checkout";
+            document.getElementById('gate-display-num').innerText = walletNumbers[wb] || 'Not Set';
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
             document.getElementById('gate-display-amt').innerText = `${Math.ceil(finalPrice)} BDT`; toggleGatewayStep(3);
         };
+
         window.copyClipText = function(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); alert("📋 Copied!"); };
 
         window.executeFinalCheckoutSubmit = async function() {
             let trx = document.getElementById('gate-trxid-value').value.trim();
             let targetAddr = document.getElementById('gate-target-address').value.trim();
             let finalQty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
-            if(!trx) return alert("Specify TrxID.");
+            if(!trx) return alert("Specify clear verification TrxID.");
 
             let orderId = 'GZ-' + Math.floor(100000 + Math.random() * 900000);
-            orders.push({ id: orderId, userEmail: activeUser.email, userName: activeUser.name, itemId: currentActiveItem.id, itemName: currentActiveItem.name || currentActiveItem.title, target: targetAddr, qty: finalQty, method: chosenPaymentGateway, trxId: trx, status: 'Pending' });
-            persistPlatformStorage();
+            const orderPayload = {
+                id: orderId, userEmail: activeUser.email, userName: activeUser.name, itemId: currentActiveItem.id, itemName: currentActiveItem.name || currentActiveItem.title, 
+                target: targetAddr, qty: finalQty, method: chosenPaymentGateway, trxId: trx, status: 'Pending'
+            };
 
-            if(currentActiveItem.apiId) {
-                try {
-                    let response = await fetch('/api/place-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service: currentActiveItem.apiId, link: targetAddr, quantity: finalQty }) });
-                    let result = await response.json();
-                    if(response.ok && result.success) { alert(`✅ সফল অর্ডার! API ID: ${result.orderId}`); }
-                } catch (e) {}
-            } else { alert("ℹ️ ম্যানুয়াল অর্ডার সেভ হয়েছে!"); }
-            closeModal('payment-gateway-modal');
+            db.ref('orders/' + orderId).set(orderPayload).then(async () => {
+                if(currentActiveItem.apiId) {
+                    try {
+                        let response = await fetch('/api/place-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service: currentActiveItem.apiId, link: targetAddr, quantity: finalQty }) });
+                        let result = await response.json();
+                        if(response.ok && result.success) alert(`✅ Automated API Connection Fused! ID: ${result.orderId}`);
+                    } catch (e) {}
+                } else { alert("ℹ️ Manual Process Queue Fused into Live DB Logs!"); }
+                closeModal('payment-gateway-modal');
+            });
         };
 
-        window.deleteServiceNode = function(id) { manualServices = manualServices.filter(s => s.id !== id); persistPlatformStorage(); };
+        window.triggerAdminAuth = function() {
+            const passKey = prompt("🔒 Enter Dashboard Admin Security Key:");
+            if (passKey === "1357") { 
+                document.getElementById('admin-secured-panel').classList.remove('hidden');
+                document.getElementById('admin-secured-panel').scrollIntoView({ behavior: 'smooth' });
+            } else { alert("🛑 Authentication Failed."); }
+        };
+
+        window.lockAdminPanel = function() { document.getElementById('admin-secured-panel').classList.add('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
         function refreshUserViewport() {
             if(activeUser) {
@@ -686,9 +733,7 @@
                 let isSel = currentFilterCategory === catKey;
                 return `
                 <div onclick="filterContentByCategory('${catKey}')" class="category-avatar-btn ${isSel ? 'active-cat' : ''}">
-                    <div class="icon-box ${conf.color}">
-                        <i class="${conf.icon}"></i>
-                    </div>
+                    <div class="icon-box ${conf.color}"><i class="${conf.icon}"></i></div>
                     <span class="text-[10px] font-bold text-gray-400 truncate max-w-[68px] text-center">${conf.name}</span>
                 </div>`;
             }).join('');
@@ -696,26 +741,19 @@
             document.getElementById('srv-category').innerHTML = Object.keys(coreCategoriesConfig).filter(k => k!=='all').map(k => `<option value="${k}">${coreCategoriesConfig[k].name}</option>`).join('');
 
             let filteredServices = allServices;
-            if (currentFilterCategory !== "all") {
-                filteredServices = filteredServices.filter(s => s.category === currentFilterCategory);
-            }
+            if (currentFilterCategory !== "all") filteredServices = filteredServices.filter(s => s.category === currentFilterCategory);
             if (searchQueryStr) {
-                filteredServices = filteredServices.filter(s => 
-                    s.name.toLowerCase().includes(searchQueryStr) || 
-                    (s.apiId && s.apiId.toString().includes(searchQueryStr))
-                );
+                filteredServices = filteredServices.filter(s => s.name.toLowerCase().includes(searchQueryStr) || (s.apiId && s.apiId.toString().includes(searchQueryStr)));
             }
 
             let filteredBooks = (currentFilterCategory === "all" || currentFilterCategory === 'books') ? books : [];
-            if(searchQueryStr && filteredBooks.length > 0) {
-                filteredBooks = filteredBooks.filter(b => b.title.toLowerCase().includes(searchQueryStr));
-            }
+            if(searchQueryStr && filteredBooks.length > 0) filteredBooks = filteredBooks.filter(b => b.title.toLowerCase().includes(searchQueryStr));
 
             document.getElementById('service-count-badge').innerText = `${filteredServices.length} Items Listed`;
             document.getElementById('section-services').style.display = (currentFilterCategory === 'books' && !searchQueryStr) ? "none" : "block";
             document.getElementById('section-books').style.display = (currentFilterCategory !== 'all' && currentFilterCategory !== 'books') ? "none" : "block";
 
-            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ কোনো সার্ভিস বা আইডি খুঁজে পাওয়া যায়নি ভাই!</div>` : filteredServices.map(s => {
+            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ No Active Logs Node Synced.</div>` : filteredServices.map(s => {
                 let isSmm = (s.calcMode === 'smm'); let isApiNode = s.id.startsWith('api_');
                 return `
                 <div class="theme-bg border rounded-2xl p-4 flex flex-col justify-between relative">
@@ -744,13 +782,15 @@
 
             if(activeUser) {
                 let userFiltered = orders.filter(o => o.userEmail === activeUser.email);
-                document.getElementById('user-orders-rows').innerHTML = userFiltered.length === 0 ? `<tr><td colspan="7" class="py-4 text-center text-gray-600 text-[11px]">No transaction history logs found.</td></tr>` : userFiltered.map(o => `
+                document.getElementById('user-orders-rows').innerHTML = userFiltered.length === 0 ? `<tr><td colspan="7" class="py-4 text-center text-gray-600 text-[11px]">No live database queues synced.</td></tr>` : userFiltered.map(o => `
                     <tr class="hover:bg-gray-900/10"><td class="py-2.5 font-mono font-bold text-gray-400">${o.id}</td><td>${o.itemName}</td><td>${o.target}</td><td>${o.qty}</td><td class="text-xs text-blue-400 font-bold">${o.method}</td><td class="font-mono text-gray-400">${o.trxId}</td><td class="text-right"><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td></tr>`).join('');
             }
             document.getElementById('admin-orders-rows').innerHTML = orders.map(o => `
                 <tr class="hover:bg-gray-900/40"><td class="px-4 py-2 font-mono text-gray-400">${o.id}</td><td class="px-4 py-2"><b>${o.userName}</b></td><td class="px-4 py-2">${o.itemName}</td><td class="px-4 py-2">${o.qty}</td><td class="px-4 py-2 font-mono text-purple-400">${o.trxId}</td><td><span>${o.status}</span></td></tr>`).join('');
         }
 
+        // Initialize Firebase Listeners
+        syncFirebaseDataEngine();
         fetchMainPanelServices();
     </script>
 </body>
