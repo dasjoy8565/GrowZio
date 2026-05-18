@@ -175,30 +175,26 @@
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
-                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-wallet text-pink-500 mr-1"></i> Gateway Dynamic Numbers & Custom Logos</h3>
+                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-wallet text-pink-500 mr-1"></i> Gateway Dynamic Numbers</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-pink-500">bKash Channel:</label>
                         <input type="text" id="cfg-bkash" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-bkash-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-orange-500">Nagad Channel:</label>
                         <input type="text" id="cfg-nagad" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-nagad-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-purple-400">Rocket Channel:</label>
                         <input type="text" id="cfg-rocket" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-rocket-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-blue-400">Upay Channel:</label>
                         <input type="text" id="cfg-upay" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
-                        <input type="file" id="cfg-upay-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                 </div>
-                <button onclick="commitAdminWallets()" class="mt-3 theme-accent text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save Gateways & Images</button>
+                <button onclick="commitAdminWallets()" class="mt-3 theme-accent text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save Gateways</button>
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
@@ -260,7 +256,6 @@
                                 <th class="px-4 py-2.5">Gateway</th>
                                 <th class="px-4 py-2.5">Trx ID</th>
                                 <th class="px-4 py-2.5">Status</th>
-                                <th class="px-4 py-2.5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="admin-orders-rows" class="divide-y divide-gray-900"></tbody>
@@ -365,16 +360,6 @@
                 </form>
                 <p class="text-[11px] text-gray-500 mt-3 text-center">Need an account? <button onclick="toggleAuthFrames(false)" class="text-blue-400 hover:underline">Register</button></p>
             </div>
-            <div id="signup-module-box" class="hidden">
-                <h3 class="text-md font-bold text-white mb-4 text-center">Create Account</h3>
-                <form id="auth-signup-form" class="space-y-3">
-                    <input type="text" id="reg-name" placeholder="Full Name" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
-                    <input type="email" id="reg-email" placeholder="Email Address" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
-                    <input type="password" id="reg-pass" placeholder="Password" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg text-xs transition">Sign Up</button>
-                </form>
-                <p class="text-[11px] text-gray-500 mt-3 text-center">Already registered? <button onclick="toggleAuthFrames(true)" class="text-blue-400 hover:underline">Login</button></p>
-            </div>
         </div>
     </div>
 
@@ -402,12 +387,12 @@
         let profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0;
 
         let manualServices = JSON.parse(localStorage.getItem('gz_services')) || [];
+        let apiServicesRaw = []; 
         let apiServices = []; 
         let books = JSON.parse(localStorage.getItem('gz_books')) || [
             { id: 'b_1', title: 'Advanced Digital Growth Marketing Secrets', author: 'GrowZio Labs', price: 120, cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300', stock: 240, category: 'books', calcMode: 'piece' }
         ];
 
-        // 🎨 আইকন ফিক্সড ক্লাসিং মেকানিজম (ভেঙে চারকোনা বক্স হওয়া বন্ধ করবে)
         const coreCategoriesConfig = {
             'all': { name: 'All Items', icon: 'fa-solid fa-layer-group', color: 'bg-gradient-to-tr from-blue-600 to-indigo-600' },
             'books': { name: 'E-Books', icon: 'fa-solid fa-book-open', color: 'bg-gradient-to-tr from-emerald-600 to-teal-500' },
@@ -420,12 +405,50 @@
             'topup': { name: 'Top-Ups', icon: 'fa-solid fa-mobile-screen', color: 'bg-gradient-to-tr from-amber-500 to-orange-600' },
             'canva_premium': { name: 'Canva', icon: 'fa-solid fa-crown', color: 'bg-indigo-500' },
             'own_service': { name: 'Own Srv', icon: 'fa-solid fa-gears', color: 'bg-purple-600' },
-            'freefire': { name: 'Freefire', icon: 'fa-solid fa-gamepad', color: 'bg-orange-600' },
-            'new_service': { name: 'New Srv', icon: 'fa-solid fa-plus', color: 'bg-teal-600' }
+            'freefire': { name: 'Freefire', icon: 'fa-solid fa-gamepad', color: 'bg-orange-600' }
         };
 
         let currentFilterCategory = "all"; 
         let searchQueryStr = ""; 
+
+        // 🔄 Raw API ডেটা প্রসেসিং মেকানিজম (লাইভ রেট আপডেটের জন্য ফিক্সড)
+        function processApiServices() {
+            if (!Array.isArray(apiServicesRaw)) return;
+            apiServices = apiServicesRaw.map(item => {
+                let rawUsdPrice = parseFloat(item.rate); 
+                let costInBdt = rawUsdPrice * dollarRate;
+                let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
+
+                let rawCat = item.category.toLowerCase();
+                let catId = 'other';
+                if (rawCat.includes('tiktok')) catId = 'tiktok';
+                else if (rawCat.includes('facebook') || rawCat.includes('fb')) catId = 'facebook';
+                else if (rawCat.includes('instagram') || rawCat.includes('ig')) catId = 'instagram';
+                else if (rawCat.includes('youtube') || rawCat.includes('yt')) catId = 'youtube';
+                else if (rawCat.includes('telegram') || rawCat.includes('tg')) catId = 'telegram';
+                else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
+                else if (rawCat.includes('canva')) catId = 'canva_premium';
+                else if (rawCat.includes('freefire') || rawCat.includes('fire')) catId = 'freefire';
+                else {
+                    catId = rawCat.replace(/[^a-z0-9]/g, '_');
+                    if(!coreCategoriesConfig[catId]) {
+                        coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-solid fa-cube', color: 'bg-slate-700' };
+                    }
+                }
+
+                return {
+                    id: 'api_' + item.service,
+                    name: item.name,
+                    price: finalPriceBdt,
+                    stock: 99999, 
+                    category: catId,
+                    calcMode: 'smm', 
+                    apiId: item.service,
+                    cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
+                };
+            });
+            refreshUserViewport();
+        }
 
         async function fetchMainPanelServices() {
             try {
@@ -433,43 +456,11 @@
                 if (res.ok) {
                     let data = await res.json();
                     if (Array.isArray(data)) {
-                        apiServices = data.map(item => {
-                            let rawUsdPrice = parseFloat(item.rate); 
-                            let costInBdt = rawUsdPrice * dollarRate;
-                            let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
-
-                            let rawCat = item.category.toLowerCase();
-                            let catId = 'other';
-                            if (rawCat.includes('tiktok')) catId = 'tiktok';
-                            else if (rawCat.includes('facebook') || rawCat.includes('fb')) catId = 'facebook';
-                            else if (rawCat.includes('instagram') || rawCat.includes('ig')) catId = 'instagram';
-                            else if (rawCat.includes('youtube') || rawCat.includes('yt')) catId = 'youtube';
-                            else if (rawCat.includes('telegram') || rawCat.includes('tg')) catId = 'telegram';
-                            else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
-                            else if (rawCat.includes('canva')) catId = 'canva_premium';
-                            else if (rawCat.includes('freefire') || rawCat.includes('fire')) catId = 'freefire';
-                            else {
-                                catId = rawCat.replace(/[^a-z0-9]/g, '_');
-                                if(!coreCategoriesConfig[catId]) {
-                                    coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-solid fa-cube', color: 'bg-slate-700' };
-                                }
-                            }
-
-                            return {
-                                id: 'api_' + item.service,
-                                name: item.name,
-                                price: finalPriceBdt,
-                                stock: 99999, 
-                                category: catId,
-                                calcMode: 'smm', 
-                                apiId: item.service,
-                                cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
-                            };
-                        });
+                        apiServicesRaw = data; // র ডেটা সেভ রাখা হলো
+                        processApiServices();
                     }
                 }
             } catch (err) { console.error("Error syncing API: ", err); }
-            refreshUserViewport();
         }
 
         function persistPlatformStorage() {
@@ -479,11 +470,10 @@
             localStorage.setItem('gz_users', JSON.stringify(users));
             localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
             localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
-            generateSyncCode(); // আপডেট হলেই নতুন কোড তৈরি হবে
+            generateSyncCode();
             refreshUserViewport();
         }
 
-        // 🔗 ডেটা সিঙ্ক কোড জেনারেটর মেকানিজম
         function generateSyncCode() {
             try {
                 let packet = { r: dollarRate, m: profitMargin };
@@ -512,9 +502,30 @@
                     localStorage.setItem('gz_dollar_rate', dollarRate);
                     localStorage.setItem('gz_profit_margin', profitMargin);
                     alert("⚡ রেট ও প্রফিট মার্জিন সফলভাবে ইম্পোর্ট হয়েছে!");
-                    fetchMainPanelServices();
+                    processApiServices(); // লাইভ রি-ক্যালকুলেশন
                 } else { alert("ভুল কোড দিয়েছেন ভাই!"); }
             } catch(e) { alert("কোডটি রিড করা সম্ভব হয়নি!"); }
+        };
+
+        // ⚙️ প্রফিট এবং ডলার রেট লাইভ আপডেট মেকানিজম (FIXED)
+        window.commitApiPricingSettings = function() {
+            let rateInput = document.getElementById('cfg-dollar-rate').value;
+            let marginInput = document.getElementById('cfg-profit-margin').value;
+            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন ভাই!");
+            
+            // ১. ভ্যালু আপডেট
+            dollarRate = parseFloat(rateInput);
+            profitMargin = parseFloat(marginInput);
+            
+            // ২. লোকাল স্টোরেজে সেভ
+            localStorage.setItem('gz_dollar_rate', dollarRate);
+            localStorage.setItem('gz_profit_margin', profitMargin);
+            
+            // ৩. লাইভ থাকা এপিআই সার্ভিসের প্রাইস সাথে সাথে রি-ক্যালকুলেট করা
+            processApiServices(); 
+            generateSyncCode();
+            
+            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ এবং লাইভ আপডেট হয়েছে!");
         };
 
         window.triggerGlobalSearch = function(val) {
@@ -541,22 +552,6 @@
 
         window.openModal = function(id) { document.getElementById(id).classList.add('active'); };
         window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); };
-        window.toggleAuthFrames = function(viewMode) {
-            document.getElementById('login-module-box').classList.toggle('hidden', !viewMode);
-            document.getElementById('signup-module-box').classList.toggle('hidden', viewMode);
-        };
-
-        window.commitApiPricingSettings = function() {
-            let rateInput = document.getElementById('cfg-dollar-rate').value;
-            let marginInput = document.getElementById('cfg-profit-margin').value;
-            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন ভাই!");
-            dollarRate = parseFloat(rateInput);
-            profitMargin = parseFloat(marginInput);
-            localStorage.setItem('gz_dollar_rate', dollarRate);
-            localStorage.setItem('gz_profit_margin', profitMargin);
-            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ হয়েছে!");
-            fetchMainPanelServices(); 
-        };
 
         let cacheSrvBase64 = "";
         document.getElementById('srv-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheSrvBase64=ev.target.result;}; r.readAsDataURL(f); } });
@@ -592,12 +587,11 @@
 
         let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
         let users = JSON.parse(localStorage.getItem('gz_users')) || [];
-        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
+        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || { name: "Guest Admin", email: "admin@growzio.com" };
         let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
         let currentActiveItem = null; let chosenPaymentGateway = "";
 
         window.launchPaymentGateway = function(id) {
-            if(!activeUser) { alert("🔒 Please log in first."); openModal('auth-modal'); return; }
             currentActiveItem = apiServices.find(s => s.id === id) || manualServices.find(s => s.id === id) || books.find(b => b.id === id);
             if(!currentActiveItem) return;
             document.getElementById('gate-target-address').value = ""; document.getElementById('gate-trxid-value').value = "";
@@ -647,13 +641,7 @@
             orders.push({ id: orderId, userEmail: activeUser.email, userName: activeUser.name, itemId: currentActiveItem.id, itemName: currentActiveItem.name || currentActiveItem.title, target: targetAddr, qty: finalQty, method: chosenPaymentGateway, trxId: trx, status: 'Pending' });
             persistPlatformStorage();
 
-            if(currentActiveItem.apiId) {
-                try {
-                    let response = await fetch('/api/place-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service: currentActiveItem.apiId, link: targetAddr, quantity: finalQty }) });
-                    let result = await response.json();
-                    if(response.ok && result.success) { alert(`✅ সফল অর্ডার! API ID: ${result.orderId}`); }
-                } catch (e) {}
-            } else { alert("ℹ️ ম্যানুয়াল অর্ডার সেভ হয়েছে!"); }
+            alert("ℹ️ অর্ডার সফলভাবে সাবমিট হয়েছে!");
             closeModal('payment-gateway-modal');
         };
 
@@ -661,8 +649,6 @@
             if(activeUser) {
                 document.getElementById('auth-zone').classList.add('hidden'); document.getElementById('profile-zone').classList.remove('hidden');
                 document.getElementById('profile-name').innerText = `👤 ${activeUser.name}`; document.getElementById('user-tracking-section').classList.remove('hidden');
-            } else {
-                document.getElementById('auth-zone').classList.remove('hidden'); document.getElementById('profile-zone').classList.add('hidden'); document.getElementById('user-tracking-section').classList.add('hidden');
             }
 
             let allServices = [...manualServices, ...apiServices];
@@ -704,7 +690,7 @@
             document.getElementById('section-services').style.display = (currentFilterCategory === 'books' && !searchQueryStr) ? "none" : "block";
             document.getElementById('section-books').style.display = (currentFilterCategory !== 'all' && currentFilterCategory !== 'books') ? "none" : "block";
 
-            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ কোনো সার্ভিস বা আইডি খুঁজে পাওয়া যায়নি ভাই!</div>` : filteredServices.map(s => {
+            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ কোনো সার্ভিস খুঁজে পাওয়া যায়নি ভাই!</div>` : filteredServices.map(s => {
                 let isSmm = (s.calcMode === 'smm'); let isApiNode = s.id.startsWith('api_');
                 return `
                 <div class="theme-bg border rounded-2xl p-4 flex flex-col justify-between relative">
