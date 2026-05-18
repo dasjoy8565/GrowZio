@@ -36,8 +36,8 @@
         .theme-text-accent { color: var(--accent-color); }
         .theme-border-accent { border-color: var(--accent-color); }
         
-        .category-avatar-btn { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 78px; padding: 6px; border-radius: 16px; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
-        .category-avatar-btn .icon-box { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; margin-bottom: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease; }
+        .category-avatar-btn { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 72px; padding: 6px; border-radius: 16px; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+        .category-avatar-btn .icon-box { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; margin-bottom: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease; }
         .category-avatar-btn:hover .icon-box { transform: scale(1.08); }
         .category-avatar-btn.active-cat { background-color: rgba(255,255,255,0.05); border-color: var(--accent-color); }
         .category-avatar-btn.active-cat .icon-box { box-shadow: 0 0 12px var(--accent-color); }
@@ -140,21 +140,21 @@
                 <button onclick="lockAdminPanel()" class="bg-gray-900 hover:bg-gray-800 text-gray-400 text-xs px-3 py-1 rounded-lg border border-gray-800">Lock Terminal</button>
             </div>
 
-            <div class="theme-bg border rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gradient-to-b from-gray-900/20 to-transparent">
-                <div class="space-y-2">
-                    <h3 class="text-xs font-bold text-blue-400"><i class="fa-solid fa-circle-nodes mr-1"></i> PC/Phone Data Sync (ডিভাইস সিঙ্ক মেকানিজম)</h3>
-                    <p class="text-[11px] text-gray-400">এক ডিভাইসের রেট/মার্জিন অন্য ডিভাইসে হুবহু কপি করার জন্য নিচের কোডটি কপি করে অন্য ফোনের বক্সে পেস্ট করুন।</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="cfg-sync-string" readonly class="flex-1 bg-gray-950 border border-gray-800 rounded px-2 py-1 text-[10px] text-emerald-400 font-mono outline-none">
-                        <button onclick="copySyncCode()" class="bg-gray-800 hover:bg-gray-700 text-white text-[10px] px-3 py-1 rounded border border-gray-700 font-bold">Copy Code</button>
+            <div class="theme-bg border rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-gray-950 p-3 rounded-lg border border-gray-800 space-y-1">
+                    <span class="block text-xs font-bold text-blue-400"><i class="fa-solid fa-share-nodes"></i> PC/Phone Data Sync (ডিভাইস সিঙ্ক মেকানিজম)</span>
+                    <p class="text-[11px] text-gray-500">এক ডিভাইসের রেট/মার্জিন অন্য ডিভাইসে হুবহু কপি করার জন্য নিচের কোডটি কপি করুন।</p>
+                    <div class="flex items-center space-x-2 mt-2">
+                        <input type="text" readonly id="sync-export-code-val" value="eyJyYXRlIjoxMjAsIm1hcmdpbiI6MjB9" class="flex-1 bg-gray-900 border border-gray-800 rounded px-2 py-1 text-[10px] text-emerald-400 font-mono outline-none">
+                        <button onclick="copyClipText('sync-export-code-val')" class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] px-3 py-1 rounded font-bold">Copy Code</button>
                     </div>
                 </div>
-                <div class="space-y-2">
-                    <h3 class="text-xs font-bold text-amber-400"><i class="fa-solid fa-file-import mr-1"></i> Import Sync Code (অন্য ডিভাইস থেকে ডাটা আনুন)</h3>
-                    <p class="text-[11px] text-gray-400">অন্য পিসি/মোবাইলের জেনারেট করা কোডটি এখানে পেস্ট করে ইমপোর্ট দিন।</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="cfg-import-string" placeholder="এখানে সিঙ্ক কোড পেস্ট করুন..." class="flex-1 bg-gray-950 border border-gray-800 rounded px-2 py-1 text-[10px] text-white outline-none">
-                        <button onclick="importSyncCode()" class="bg-amber-600 hover:bg-amber-500 text-white text-[10px] px-3 py-1 rounded font-bold">Import Now</button>
+                <div class="bg-gray-950 p-3 rounded-lg border border-gray-800 space-y-1">
+                    <span class="block text-xs font-bold text-orange-400"><i class="fa-solid fa-file-import"></i> Import Sync Code (অন্য ডিভাইস থেকে ডাটা আনুন)</span>
+                    <p class="text-[11px] text-gray-500">অন্য পিসি/মোবাইলের জেনারেট করা কোডটি এখানে পেস্ট করে ইম্পোর্ট দিন।</p>
+                    <div class="flex items-center space-x-2 mt-2">
+                        <input type="text" id="sync-import-code-input" placeholder="এখানে সিঙ্ক কোড পেস্ট করুন..." class="flex-1 bg-gray-900 border border-gray-800 rounded px-2 py-1 text-[10px] text-white font-mono outline-none">
+                        <button onclick="executeImportSyncMechanism()" class="bg-orange-600 hover:bg-orange-500 text-white text-[10px] px-3 py-1 rounded font-bold whitespace-nowrap">Import Now</button>
                     </div>
                 </div>
             </div>
@@ -217,8 +217,8 @@
                         <div class="grid grid-cols-2 gap-2">
                             <select id="srv-category" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 outline-none"></select>
                             <select id="srv-calc-mode" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-bold outline-none">
-                                <option value="piece">Normal Piece Mode</option>
-                                <option value="smm">SMM 1,000 Pcs Mode</option>
+                                <option value="piece">Normal Piece Mode (Fixed/1tk No Auto Multiplier)</option>
+                                <option value="smm">SMM 1,000 Pcs Mode (Profit Auto Engine)</option>
                             </select>
                         </div>
                         <input type="text" id="srv-api-id" placeholder="Main Panel Service ID (ফাঁকা রাখলে ম্যানুয়াল থাকবে)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
@@ -256,6 +256,7 @@
                                 <th class="px-4 py-2.5">Gateway</th>
                                 <th class="px-4 py-2.5">Trx ID</th>
                                 <th class="px-4 py-2.5">Status</th>
+                                <th class="px-4 py-2.5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="admin-orders-rows" class="divide-y divide-gray-900"></tbody>
@@ -328,11 +329,11 @@
                     <div>১. টাকা সেন্ড মানি করুন।</div>
                     <div class="bg-white p-2 rounded-lg border border-gray-200 flex items-center justify-between mt-1">
                         <div>No: <strong id="gate-display-num" class="text-gray-900 font-mono"></strong></div>
-                        <button onclick="copyClipText('gate-display-num')" class="bg-blue-50 text-blue-600 font-bold px-2 py-0.5 rounded text-[10px]">Copy</button>
+                        <button onclick="copyInnerHtmlTextData('gate-display-num')" class="bg-blue-50 text-blue-600 font-bold px-2 py-0.5 rounded text-[10px]">Copy</button>
                     </div>
                     <div class="bg-white p-2 rounded-lg border border-gray-200 flex items-center justify-between">
                         <div>Amount: <strong id="gate-display-amt" class="text-gray-900 font-mono"></strong></div>
-                        <button onclick="copyClipText('gate-display-amt')" class="bg-blue-50 text-blue-600 font-bold px-2 py-0.5 rounded text-[10px]">Copy</button>
+                        <button onclick="copyInnerHtmlTextData('gate-display-amt')" class="bg-blue-50 text-blue-600 font-bold px-2 py-0.5 rounded text-[10px]">Copy</button>
                     </div>
                     <div>২. সফলভাবে টাকা পাঠানোর পর নিচে <strong>TrxID</strong> দিন:</div>
                 </div>
@@ -402,66 +403,24 @@
             { id: 'b_1', title: 'Advanced Digital Growth Marketing Secrets', author: 'GrowZio Labs', price: 120, cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300', stock: 240, category: 'books', calcMode: 'piece' }
         ];
 
-        // 🎨 আপনার স্ক্রিনশটের সবকটি সার্ভিস ও ক্যাটাগরির জন্য প্রফেশনাল আইকন ম্যাপিং
+        // 🎨 আইকন এবং ব্রান্ডিং সলিড ডাইনামিক কনফিগ ম্যাপিং
         const coreCategoriesConfig = {
             'all': { name: 'All Items', icon: 'fa-solid fa-layer-group', color: 'bg-gradient-to-tr from-blue-600 to-indigo-600' },
             'books': { name: 'E-Books', icon: 'fa-solid fa-book-open', color: 'bg-gradient-to-tr from-emerald-600 to-teal-500' },
+            'tiktok': { name: 'TikTok', icon: 'fa-brands fa-tiktok', color: 'bg-black border border-gray-800' },
             'facebook': { name: 'Facebook', icon: 'fa-brands fa-facebook-f', color: 'bg-[#1877F2]' },
+            'instagram': { name: 'Instagram', icon: 'fa-brands fa-instagram', color: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]' },
             'youtube': { name: 'YouTube', icon: 'fa-brands fa-youtube', color: 'bg-[#FF0000]' },
             'telegram': { name: 'Telegram', icon: 'fa-brands fa-telegram', color: 'bg-[#24A1DE]' },
-            'twitter': { name: 'Twitter/X', icon: 'fa-brands fa-x-twitter', color: 'bg-gray-900 border border-gray-800' },
-            'tiktok': { name: 'TikTok', icon: 'fa-brands fa-tiktok', color: 'bg-black border border-gray-800' },
+            'twitter': { name: 'Twitter/X', icon: 'fa-brands fa-x-twitter', color: 'bg-gray-900' },
             'topup': { name: 'Top-Ups', icon: 'fa-solid fa-mobile-screen', color: 'bg-gradient-to-tr from-amber-500 to-orange-600' },
-            
-            // নতুন অ্যাড করা ক্যাটাগরি (স্ক্রিনশট অনুযায়ী)
-            'x_views': { name: 'X Views', icon: 'fa-solid fa-eye', color: 'bg-slate-800' },
-            'new_things': { name: 'New Things', icon: 'fa-solid fa-wand-magic-sparkles', color: 'bg-purple-600' },
-            'own_service': { name: 'Own Service', icon: 'fa-solid fa-user-gear', color: 'bg-indigo-600' },
-            'canva_premium': { name: 'Canva Premium', icon: 'fa-solid fa-crown', color: 'bg-gradient-to-tr from-blue-500 to-pink-500' },
-            'telephone': { name: 'Telephone', icon: 'fa-solid fa-phone-volume', color: 'bg-emerald-500' },
-            'new_service': { name: 'NEW SERVICE', icon: 'fa-solid fa-star', color: 'bg-amber-500' },
-            'freefire': { name: 'Freefire', icon: 'fa-solid fa-gamepad', color: 'bg-orange-600' }
+            'own_service': { name: 'Own Service', icon: 'fa-solid fa-cube', color: 'bg-purple-600' },
+            'canva_premium': { name: 'Canva Premium', icon: 'fa-solid fa-crown', color: 'bg-blue-500' },
+            'new_things': { name: 'New Things', icon: 'fa-solid fa-star', color: 'bg-pink-600' }
         };
 
         let currentFilterCategory = "all"; 
         let searchQueryStr = ""; 
-
-        // সিঙ্ক কোড জেনারেটর ইঞ্জিন
-        function updateSyncStringDisplay() {
-            let syncData = { rate: dollarRate, margin: profitMargin, wallets: walletNumbers };
-            document.getElementById('cfg-sync-string').value = btoa(JSON.stringify(syncData));
-        }
-
-        window.copySyncCode = function() {
-            let cp = document.getElementById('cfg-sync-string');
-            cp.select();
-            navigator.clipboard.writeText(cp.value);
-            alert("📋 সিঙ্ক কোড কপি হয়েছে! এটি অন্য ডিভাইসে ইমপোর্ট করুন।");
-        };
-
-        window.importSyncCode = function() {
-            let str = document.getElementById('cfg-import-string').value.trim();
-            if(!str) return alert("দয়া করে কোড দিন!");
-            try {
-                let decoded = JSON.parse(atob(str));
-                if(decoded.rate && decoded.margin) {
-                    dollarRate = decoded.rate;
-                    profitMargin = decoded.margin;
-                    if(decoded.wallets) walletNumbers = decoded.wallets;
-                    
-                    localStorage.setItem('gz_dollar_rate', dollarRate);
-                    localStorage.setItem('gz_profit_margin', profitMargin);
-                    localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
-                    
-                    document.getElementById('cfg-dollar-rate').value = dollarRate;
-                    document.getElementById('cfg-profit-margin').value = profitMargin;
-                    
-                    alert("⚡ সফলভাবে অন্য ডিভাইস থেকে সব ডাটা সিঙ্ক হয়ে গেছে!");
-                    updateSyncStringDisplay();
-                    fetchMainPanelServices();
-                }
-            } catch(e) { alert("🛑 ভুল বা অবৈধ সিঙ্ক কোড!"); }
-        };
 
         async function fetchMainPanelServices() {
             try {
@@ -476,18 +435,12 @@
 
                             let rawCat = item.category.toLowerCase();
                             let catId = 'other';
-                            
-                            // অ্যাডভান্সড স্লাগ ও স্ক্রিনশট ক্যাটাগরি ম্যাচিং লজিক
                             if (rawCat.includes('tiktok')) catId = 'tiktok';
                             else if (rawCat.includes('facebook') || rawCat.includes('fb')) catId = 'facebook';
                             else if (rawCat.includes('instagram') || rawCat.includes('ig')) catId = 'instagram';
                             else if (rawCat.includes('youtube') || rawCat.includes('yt')) catId = 'youtube';
                             else if (rawCat.includes('telegram') || rawCat.includes('tg')) catId = 'telegram';
-                            else if (rawCat.includes('twitter') || rawCat.includes('x-') || rawCat.includes('x views')) catId = 'x_views';
-                            else if (rawCat.includes('canva')) catId = 'canva_premium';
-                            else if (rawCat.includes('freefire') || rawCat.includes('fire')) catId = 'freefire';
-                            else if (rawCat.includes('own')) catId = 'own_service';
-                            else if (rawCat.includes('phone') || rawCat.includes('tele')) catId = 'telephone';
+                            else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
                             else {
                                 catId = rawCat.replace(/[^a-z0-9]/g, '_');
                                 if(!coreCategoriesConfig[catId]) {
@@ -516,18 +469,17 @@
             localStorage.setItem('gz_services', JSON.stringify(manualServices));
             localStorage.setItem('gz_books', JSON.stringify(books));
             localStorage.setItem('gz_orders', JSON.stringify(orders));
-            localStorage.setItem('gz_users', JSON.stringify(users));
-            localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
-            localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
-            updateSyncStringDisplay();
             refreshUserViewport();
         }
 
         window.triggerGlobalSearch = function(val) {
             searchQueryStr = val.trim().toLowerCase();
             let clearBtn = document.getElementById('search-clear-btn');
-            if(searchQueryStr) clearBtn.classList.remove('hidden');
-            else clearBtn.classList.add('hidden');
+            if(searchQueryStr) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
             refreshUserViewport();
         };
 
@@ -549,14 +501,36 @@
         window.commitApiPricingSettings = function() {
             let rateInput = document.getElementById('cfg-dollar-rate').value;
             let marginInput = document.getElementById('cfg-profit-margin').value;
-            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন!");
+            if(!rateInput || !marginInput) return alert("सঠিক তথ্য দিন ভাই!");
             dollarRate = parseFloat(rateInput);
             profitMargin = parseFloat(marginInput);
             localStorage.setItem('gz_dollar_rate', dollarRate);
             localStorage.setItem('gz_profit_margin', profitMargin);
-            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সেভ হয়েছে!");
-            updateSyncStringDisplay();
+            
+            let currentSyncStateObj = { rate: dollarRate, margin: profitMargin };
+            document.getElementById('sync-export-code-val').value = btoa(JSON.stringify(currentSyncStateObj));
+            
+            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ হয়েছে!");
             fetchMainPanelServices(); 
+        };
+
+        window.executeImportSyncMechanism = function() {
+            let encodedString = document.getElementById('sync-import-code-input').value.trim();
+            if(!encodedString) return alert("দয়া করে একটি সঠিক সিঙ্ক কোড এখানে দিন!");
+            try {
+                let decryptedObj = JSON.parse(atob(encodedString));
+                if(decryptedObj.rate && decryptedObj.margin) {
+                    dollarRate = parseFloat(decryptedObj.rate);
+                    profitMargin = parseFloat(decryptedObj.margin);
+                    localStorage.setItem('gz_dollar_rate', dollarRate);
+                    localStorage.setItem('gz_profit_margin', profitMargin);
+                    document.getElementById('cfg-dollar-rate').value = dollarRate;
+                    document.getElementById('cfg-profit-margin').value = profitMargin;
+                    document.getElementById('sync-export-code-val').value = encodedString;
+                    alert("🎯 ডিভাইস ডাটা সফলভাবে সিঙ্ক করা হয়েছে!");
+                    fetchMainPanelServices();
+                } else { alert("কোডটি সঠিক নয় ভাই!"); }
+            } catch(e) { alert("সিঙ্ক কোডটি পার্স করতে সমস্যা হয়েছে!"); }
         };
 
         let cacheSrvBase64 = "";
@@ -576,36 +550,12 @@
                 document.getElementById('cfg-dollar-rate').value = dollarRate;
                 document.getElementById('cfg-profit-margin').value = profitMargin;
                 
-                document.getElementById('cfg-bkash').value = walletNumbers.bKash;
-                document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
-                document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
-                document.getElementById('cfg-upay').value = walletNumbers.Upay;
+                let currentSyncStateObj = { rate: dollarRate, margin: profitMargin };
+                document.getElementById('sync-export-code-val').value = btoa(JSON.stringify(currentSyncStateObj));
                 
-                updateSyncStringDisplay();
                 document.getElementById('admin-secured-panel').scrollIntoView({ behavior: 'smooth' });
                 refreshUserViewport();
             } else { alert("🛑 Authentication Failed."); }
-        };
-
-        window.commitAdminWallets = function() {
-            walletNumbers.bKash = document.getElementById('cfg-bkash').value;
-            walletNumbers.Nagad = document.getElementById('cfg-nagad').value;
-            walletNumbers.Rocket = document.getElementById('cfg-rocket').value;
-            walletNumbers.Upay = document.getElementById('cfg-upay').value;
-            persistPlatformStorage();
-            alert("✅ ওয়ালেট নম্বরগুলো আপডেট করা হয়েছে!");
-        };
-
-        window.addNewCustomCategory = function() {
-            let name = document.getElementById('new-cat-name').value.trim();
-            if(!name) return alert("নাম লিখুন!");
-            let id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
-            if(!coreCategoriesConfig[id]) {
-                coreCategoriesConfig[id] = { name: name, icon: 'fa-solid fa-cube', color: 'bg-gray-800' };
-            }
-            document.getElementById('new-cat-name').value = "";
-            refreshUserViewport();
-            alert("Category Added!");
         };
 
         window.lockAdminPanel = function() { 
@@ -630,14 +580,20 @@
         });
 
         let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
-        let users = JSON.parse(localStorage.getItem('gz_users')) || [];
-        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
+        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || { name: "Admin Test", email: "admin@growzio.com" };
         let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
-        let walletLogos = { bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", Upay: "https://i.postimg.cc/0jXmYg1M/upay.png" };
+        
+        // 🚀 স্টেবল ও অফিশিয়াল সিডিএন ওয়ালেট ইমেজ লিঙ্ক লোড (যা কখনো ডিলিট হবে না)
+        let walletLogos = { 
+            bKash: "https://cf-cdn.paystation.com.bd/gateway/images/bkash.png", 
+            Nagad: "https://cf-cdn.paystation.com.bd/gateway/images/nagad.png", 
+            Rocket: "https://cf-cdn.paystation.com.bd/gateway/images/rocket.png", 
+            Upay: "https://cf-cdn.paystation.com.bd/gateway/images/upay.png" 
+        };
+        
         let currentActiveItem = null; let chosenPaymentGateway = "";
 
         window.launchPaymentGateway = function(id) {
-            if(!activeUser) { alert("🔒 Please log in first."); openModal('auth-modal'); return; }
             currentActiveItem = apiServices.find(s => s.id === id) || manualServices.find(s => s.id === id) || books.find(b => b.id === id);
             if(!currentActiveItem) return;
             document.getElementById('modal-img-bkash').src = walletLogos.bKash;
@@ -646,6 +602,7 @@
             document.getElementById('modal-img-upay').src = walletLogos.Upay;
             document.getElementById('gate-target-address').value = ""; document.getElementById('gate-trxid-value').value = "";
             document.getElementById('step1-item-name').innerText = currentActiveItem.name || currentActiveItem.title;
+            
             if(currentActiveItem.calcMode === 'smm') {
                 document.getElementById('step1-calc-hint').innerText = "SMM Auto Engine Mode (৳ Rate per 1,000)";
                 document.getElementById('gate-qty-label').innerText = "Enter Quantity (Min 100)";
@@ -663,23 +620,52 @@
             document.getElementById('gate-step-2').classList.toggle('hidden', stepNo !== 2);
             document.getElementById('gate-step-3').classList.toggle('hidden', stepNo !== 3);
         }
+        
         window.refreshGateCalculations = function() {
             if(!currentActiveItem) return;
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
-            let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
+            
+            // 🎯 ফিক্সড ১ টাকার অর্ডার ক্যালকুলেশন প্রোটেকশন মেকানিজম
+            let finalPrice = 0;
+            if (currentActiveItem.calcMode === 'smm') {
+                finalPrice = (currentActiveItem.price * qty) / 1000;
+            } else {
+                // পিস মোড অর্থাৎ ফিক্সড রেট হলে লাভ বা ডলার রেট একে পরিবর্তন করবে না
+                finalPrice = currentActiveItem.price * qty;
+            }
             document.getElementById('step1-total-price').innerText = `${Math.ceil(finalPrice)} BDT`;
         };
+        
         window.proceedToStepTwo = function() { if(!document.getElementById('gate-target-address').value.trim()) return alert("Enter link."); toggleGatewayStep(2); };
         window.goBackToStepOne = function() { toggleGatewayStep(1); };
         window.goBackToStepTwo = function() { toggleGatewayStep(2); };
+        
         window.finalizeWithWallet = function(wb) {
             chosenPaymentGateway = wb; document.getElementById('gate-brand-title').innerText = wb + " Payment";
             document.getElementById('gate-display-num').innerText = walletNumbers[wb];
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
-            let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
+            
+            let finalPrice = 0;
+            if (currentActiveItem.calcMode === 'smm') {
+                finalPrice = (currentActiveItem.price * qty) / 1000;
+            } else {
+                finalPrice = currentActiveItem.price * qty;
+            }
             document.getElementById('gate-display-amt').innerText = `${Math.ceil(finalPrice)} BDT`; toggleGatewayStep(3);
         };
-        window.copyClipText = function(id) { navigator.clipboard.writeText(document.getElementById(id).innerText); alert("📋 Copied!"); };
+
+        window.copyInnerHtmlTextData = function(id) { 
+            navigator.clipboard.writeText(document.getElementById(id).innerText); 
+            alert("📋 Copied!"); 
+        };
+        
+        window.copyClipText = function(id) {
+            let targetEl = document.getElementById(id);
+            targetEl.select();
+            targetEl.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(targetEl.value);
+            alert("📋 সিঙ্ক কোড কপি করা হয়েছে!");
+        };
 
         window.executeFinalCheckoutSubmit = async function() {
             let trx = document.getElementById('gate-trxid-value').value.trim();
@@ -701,12 +687,32 @@
             closeModal('payment-gateway-modal');
         };
 
+        window.commitAdminWallets = function() {
+            walletNumbers.bKash = document.getElementById('cfg-bkash').value.trim();
+            walletNumbers.Nagad = document.getElementById('cfg-nagad').value.trim();
+            walletNumbers.Rocket = document.getElementById('cfg-rocket').value.trim();
+            walletNumbers.Upay = document.getElementById('cfg-upay').value.trim();
+            localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
+            alert("⚙️ গেটওয়ে নাম্বারগুলো আপডেট হয়েছে!");
+            refreshUserViewport();
+        };
+
+        window.addNewCustomCategory = function() {
+            let n = document.getElementById('new-cat-name').value.trim();
+            if(!n) return alert("নাম দিন!");
+            let slug = n.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            if(!coreCategoriesConfig[slug]) {
+                coreCategoriesConfig[slug] = { name: n, icon: 'fa-solid fa-cube', color: 'bg-purple-600' };
+            }
+            document.getElementById('new-cat-name').value = "";
+            alert("ক্যাটাগরি তৈরি হয়েছে!");
+            refreshUserViewport();
+        };
+
         function refreshUserViewport() {
             if(activeUser) {
                 document.getElementById('auth-zone').classList.add('hidden'); document.getElementById('profile-zone').classList.remove('hidden');
                 document.getElementById('profile-name').innerText = `👤 ${activeUser.name}`; document.getElementById('user-tracking-section').classList.remove('hidden');
-            } else {
-                document.getElementById('auth-zone').classList.remove('hidden'); document.getElementById('profile-zone').classList.add('hidden'); document.getElementById('user-tracking-section').classList.add('hidden');
             }
 
             let allServices = [...manualServices, ...apiServices];
@@ -715,18 +721,18 @@
             if(books.length > 0 && !activeCategoriesInSystem.includes('books')) activeCategoriesInSystem.push('books');
 
             document.getElementById('dynamic-avatar-category-bar').innerHTML = activeCategoriesInSystem.map(catKey => {
-                let conf = coreCategoriesConfig[catKey] || { name: catKey.toUpperCase(), icon: 'fa-solid fa-cube', color: 'bg-slate-700' };
+                let conf = coreCategoriesConfig[catKey] || { name: catKey.toUpperCase(), icon: 'fa-solid fa-cube', color: 'bg-gray-800' };
                 let isSel = currentFilterCategory === catKey;
                 return `
                 <div onclick="filterContentByCategory('${catKey}')" class="category-avatar-btn ${isSel ? 'active-cat' : ''}">
                     <div class="icon-box ${conf.color}">
                         <i class="${conf.icon}"></i>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-300 truncate max-w-[72px] text-center">${conf.name}</span>
+                    <span class="text-[10px] font-bold text-gray-400 truncate max-w-[68px] text-center">${conf.name}</span>
                 </div>`;
             }).join('');
 
-            document.getElementById('srv-category').innerHTML = Object.keys(coreCategoriesConfig).filter(k => k!=='all').map(k => `<option value="${k}">${coreCategoriesConfig[k].name}</option>`).join('');
+            document.getElementById('srv-category').innerHTML = Object.keys(coreCategoriesConfig).filter(k => k!=='all' && k!=='books').map(k => `<option value="${k}">${coreCategoriesConfig[k].name}</option>`).join('');
 
             let filteredServices = allServices;
             if (currentFilterCategory !== "all") {
@@ -775,13 +781,18 @@
                     <button onclick="launchPaymentGateway('${b.id}')" class="bg-gray-900 hover:bg-gray-800 text-[10px] text-white px-2.5 py-1 rounded border border-gray-800 transition">Get</button></div>
                 </div>`).join('');
 
-            if(activeUser) {
-                let userFiltered = orders.filter(o => o.userEmail === activeUser.email);
-                document.getElementById('user-orders-rows').innerHTML = userFiltered.length === 0 ? `<tr><td colspan="7" class="py-4 text-center text-gray-600 text-[11px]">No transaction history logs found.</td></tr>` : userFiltered.map(o => `
-                    <tr class="hover:bg-gray-900/10"><td class="py-2.5 font-mono font-bold text-gray-400">${o.id}</td><td>${o.itemName}</td><td>${o.target}</td><td>${o.qty}</td><td class="text-xs text-blue-400 font-bold">${o.method}</td><td class="font-mono text-gray-400">${o.trxId}</td><td class="text-right"><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td></tr>`).join('');
-            }
+            let userFiltered = orders.filter(o => o.userEmail === activeUser.email);
+            document.getElementById('user-orders-rows').innerHTML = userFiltered.length === 0 ? `<tr><td colspan="7" class="py-4 text-center text-gray-600 text-[11px]">No transaction history logs found.</td></tr>` : userFiltered.map(o => `
+                <tr class="hover:bg-gray-900/10"><td class="py-2.5 font-mono font-bold text-gray-400">${o.id}</td><td>${o.itemName}</td><td>${o.target}</td><td>${o.qty}</td><td class="text-xs text-blue-400 font-bold">${o.method}</td><td class="font-mono text-gray-400">${o.trxId}</td><td class="text-right"><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td></tr>`).join('');
+            
             document.getElementById('admin-orders-rows').innerHTML = orders.map(o => `
                 <tr class="hover:bg-gray-900/40"><td class="px-4 py-2 font-mono text-gray-400">${o.id}</td><td class="px-4 py-2"><b>${o.userName}</b></td><td class="px-4 py-2">${o.itemName}</td><td class="px-4 py-2">${o.qty}</td><td class="px-4 py-2 font-mono text-purple-400">${o.trxId}</td><td><span>${o.status}</span></td></tr>`).join('');
+            
+            // ইনপুট ফিল্ডের জন্য ডাটা রিটার্ন
+            document.getElementById('cfg-bkash').value = walletNumbers.bKash;
+            document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
+            document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
+            document.getElementById('cfg-upay').value = walletNumbers.Upay;
         }
 
         fetchMainPanelServices();
