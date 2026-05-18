@@ -86,6 +86,7 @@
             <div class="mb-6"><h2 class="text-lg font-black text-white flex items-center gap-2"><i class="fa-solid fa-bolt theme-text-accent"></i> Premium Digital Services</h2></div>
             <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </section>
+
         <section id="section-books">
             <div class="mb-6"><h2 class="text-lg font-black text-white flex items-center gap-2"><i class="fa-solid fa-book theme-text-accent"></i> E-Book Store & Resources</h2></div>
             <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
@@ -119,6 +120,21 @@
                     <h2 class="text-lg font-black text-white text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-500"><i class="fa-solid fa-shield-halved"></i> Controlled Management Terminal</h2>
                 </div>
                 <button onclick="lockAdminPanel()" class="bg-gray-900 hover:bg-gray-800 text-gray-400 text-xs px-3 py-1 rounded-lg border border-gray-800">Lock Terminal</button>
+            </div>
+
+            <div class="theme-bg border rounded-xl p-4 mb-6">
+                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-key text-yellow-400 mr-1"></i> SMM Provider API Configuration</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase">Provider API URL:</label>
+                        <input type="text" id="cfg-api-url" placeholder="https://smm-provider.com/api/v2" class="w-full bg-gray-950 border border-gray-800 rounded px-3 py-2 text-xs text-white font-mono outline-none">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase">Provider Secret API Key:</label>
+                        <input type="password" id="cfg-api-key" placeholder="Enter API Key" class="w-full bg-gray-950 border border-gray-800 rounded px-3 py-2 text-xs text-white font-mono outline-none">
+                    </div>
+                </div>
+                <button onclick="saveSmmApiSettings()" class="mt-3 bg-yellow-600 hover:bg-yellow-500 text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save API Keys</button>
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
@@ -162,7 +178,7 @@
                     <form id="add-service-form" class="space-y-2">
                         <input type="text" id="srv-title" placeholder="Service Name" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
                         <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="srv-price" step="0.01" placeholder="Price (BDT)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
+                            <input type="number" id="srv-price" step="0.001" placeholder="Price (BDT)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
                             <input type="number" id="srv-stock" placeholder="Stock / Quantity" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
@@ -172,7 +188,7 @@
                                 <option value="smm">SMM 1,000 Pcs Mode</option>
                             </select>
                         </div>
-                        <input type="text" id="srv-api-id" placeholder="Main Panel Service ID (ঐচ্ছিক)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
+                        <input type="text" id="srv-api-id" placeholder="Main Panel Service ID (যেমন: 1024)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
                         <input type="file" id="srv-img" accept="image/*" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-1.5 text-xs text-gray-500">
                         <button type="submit" class="w-full theme-accent text-white text-xs font-bold py-2 rounded-lg transition">Publish Item</button>
                     </form>
@@ -192,6 +208,7 @@
                     </form>
                 </div>
             </div>
+
             <div class="theme-bg border rounded-xl overflow-hidden shadow-2xl">
                 <div class="px-4 py-3 bg-gray-900/40 border-b border-gray-800"><h3 class="text-xs font-bold text-white">Global Live Order Queues</h3></div>
                 <div class="overflow-x-auto">
@@ -291,7 +308,6 @@
                 <div>
                     <input type="text" id="gate-trxid-value" placeholder="Enter TrxID" class="w-full bg-gray-50 border border-gray-200 focus:border-blue-500 rounded-xl px-4 py-2 text-xs font-mono outline-none uppercase">
                 </div>
-
                 <button onclick="executeFinalCheckoutSubmit()" id="btn-verify-order" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase transition">
                     Verify Order
                 </button>
@@ -318,7 +334,7 @@
                     <input type="email" id="reg-email" placeholder="Email Address" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
                     <input type="password" id="reg-pass" placeholder="Password" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg text-xs transition">Sign Up</button>
-                    </form>
+                </form>
                 <p class="text-[11px] text-gray-500 mt-3 text-center">Already registered? <button onclick="toggleAuthFrames(true)" class="text-blue-400 hover:underline">Login</button></p>
             </div>
         </div>
@@ -332,7 +348,7 @@
                 <input type="hidden" id="edit-id"><input type="hidden" id="edit-target-type">
                 <div><input type="text" id="edit-name" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
                 <div class="grid grid-cols-2 gap-2">
-                    <div><input type="number" id="edit-price" step="0.01" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
+                    <div><input type="number" id="edit-price" step="0.001" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
                     <div><input type="number" id="edit-stock" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
                 </div>
                 <div class="grid grid-cols-2 gap-2">
@@ -393,6 +409,9 @@
         let users = JSON.parse(localStorage.getItem('gz_users')) || [];
         let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
         
+        // SMM API প্রোভাইডার ক্রেডেনশিয়াল লোকাল স্টোরেজ
+        let smmApiConfig = JSON.parse(localStorage.getItem('gz_smm_api_config')) || { url: "", key: "" };
+
         let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
         let walletLogos = JSON.parse(localStorage.getItem('gz_wallet_logos')) || {
             bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", Upay: "https://i.postimg.cc/0jXmYg1M/upay.png"
@@ -411,6 +430,7 @@
             localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
             localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
             localStorage.setItem('gz_wallet_logos', JSON.stringify(walletLogos));
+            localStorage.setItem('gz_smm_api_config', JSON.stringify(smmApiConfig));
             refreshUserViewport();
         }
 
@@ -435,7 +455,7 @@
         document.getElementById('bk-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheBkBase64=ev.target.result;}; r.readAsDataURL(f); } });
         document.getElementById('edit-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheEditBase64=ev.target.result;}; r.readAsDataURL(f); } });
 
-        // লোগো আপলোডের তাৎক্ষণিক মেমরি রিডার (বিকাশ ইমেজ ফিক্স লজিক)
+        // গেটওয়ে লোগো হ্যান্ডলার
         let cacheBkashLogo = "", cacheNagadLogo = "", cacheRocketLogo = "", cacheUpayLogo = "";
         document.getElementById('cfg-bkash-img').addEventListener('change', function(e){ let f = e.target.files[0]; if(f){ let r=new FileReader(); r.onload=function(ev){cacheBkashLogo=ev.target.result;}; r.readAsDataURL(f); } });
         document.getElementById('cfg-nagad-img').addEventListener('change', function(e){ let f = e.target.files[0]; if(f){ let r=new FileReader(); r.onload=function(ev){cacheNagadLogo=ev.target.result;}; r.readAsDataURL(f); } });
@@ -450,6 +470,11 @@
                 document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
                 document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
                 document.getElementById('cfg-upay').value = walletNumbers.Upay;
+                
+                // এপিআই ইনপুট ফিল্ডে ডেটা লোড
+                document.getElementById('cfg-api-url').value = smmApiConfig.url;
+                document.getElementById('cfg-api-key').value = smmApiConfig.key;
+
                 document.getElementById('admin-secured-panel').scrollIntoView({ behavior: 'smooth' });
                 refreshUserViewport();
             } else { alert("🛑 Authentication Failed."); }
@@ -457,7 +482,13 @@
 
         window.lockAdminPanel = function() { document.getElementById('admin-secured-panel').classList.add('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' }); refreshUserViewport(); };
 
-        // ইমেজ এবং গেটওয়ে নম্বর সেভিং প্রসেস (১০০% ফিক্সড)
+        // SMM এপিআই কী সেভ করার ফাংশন
+        window.saveSmmApiSettings = function() {
+            smmApiConfig.url = document.getElementById('cfg-api-url').value.trim();
+            smmApiConfig.key = document.getElementById('cfg-api-key').value.trim();
+            persistPlatformStorage();
+            alert("✅ SMM API Provider Credentials Locked successfully!");
+        };
         window.commitAdminWallets = function() {
             walletNumbers.bKash = document.getElementById('cfg-bkash').value.trim();
             walletNumbers.Nagad = document.getElementById('cfg-nagad').value.trim();
@@ -479,6 +510,7 @@
             activeUser = { name: document.getElementById('reg-name').value.trim(), email: mail, pass: document.getElementById('reg-pass').value };
             users.push(activeUser); e.target.reset(); closeModal('auth-modal'); persistPlatformStorage();
         });
+
         document.getElementById('auth-login-form').addEventListener('submit', (e) => {
             e.preventDefault();
             let matched = users.find(u => u.email === document.getElementById('log-email').value.trim() && u.pass === document.getElementById('log-pass').value);
@@ -583,7 +615,7 @@
             document.getElementById('gate-step-3').classList.toggle('hidden', stepNo !== 3);
         }
 
-        // পিওর প্রাইস লজিক: আপনি নিজে যা দাম বসাবেন, কোনো ফিক্সড লাভ ছাড়াই সরাসরি সেটাই হিসাব হবে
+        // পিওর প্রাইস ক্যালকুলেশন লজিক (দশমিকের নিখুঁত হিসাব)
         window.refreshGateCalculations = function() {
             if(!currentActiveItem) return;
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
@@ -609,6 +641,7 @@
 
         window.copyClipText = function(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace(" BDT", "")); alert("📋 Copied!"); };
 
+        // ফুললি ফাংশনাল এপিআই ইন্টিগ্রেটেড প্লেস অর্ডার লজিক
         window.executeFinalCheckoutSubmit = async function() {
             let trx = document.getElementById('gate-trxid-value').value.trim();
             let targetAddr = document.getElementById('gate-target-address').value.trim();
@@ -640,12 +673,22 @@
             orders.push(newOrder);
             persistPlatformStorage();
 
+            // SMM প্যানেলের রিয়েল ডাইনামিক API রিকোয়েস্ট লজিক
             if(currentActiveItem.apiId && currentActiveItem.apiId !== "") {
+                if(!smmApiConfig.url || !smmApiConfig.key) {
+                    alert("⚠️ এপিআই আইডি সেট করা আছে, কিন্তু অ্যাডমিন প্যানেলে SMM URL বা Key সেট করা নেই ভাই। অর্ডারটি ড্যাশবোর্ডে পেন্ডিং হিসেবে জমা হলো।");
+                    verifyBtn.innerText = "Verify Order"; verifyBtn.disabled = false; closeModal('payment-gateway-modal');
+                    return;
+                }
+
                 try {
-                    let response = await fetch('/api/order', {
+                    // মেইন প্যানেলের এপিআই স্ট্রাকচার অনুযায়ী ডাটা পাঠানো হচ্ছে
+                    let response = await fetch(smmApiConfig.url, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
+                            key: smmApiConfig.key,
+                            action: 'add',
                             service: currentActiveItem.apiId,
                             link: targetAddr,
                             quantity: finalQty
@@ -654,17 +697,18 @@
 
                     let result = await response.json();
 
-                    if(response.ok && result.success) {
-                        alert(`✅ সফলভাবে মেইন প্যানেলে অর্ডার সাবমিট হয়েছে! এপিআই অর্ডার আইডি: ${result.orderId}`);
+                    if(response.ok && (result.order || result.success)) {
+                        let providerOrderId = result.order || result.orderId;
+                        alert(`✅ সফলভাবে মেইন প্যানেলে অর্ডার সাবমিট হয়েছে! এপিআই অর্ডার আইডি: ${providerOrderId}`);
                         let targetOrder = orders.find(o => o.id === orderId);
                         if(targetOrder) targetOrder.status = 'Processing';
                         persistPlatformStorage();
                     } else {
-                        alert(`❌ এপিআই প্রসেস ব্যর্থ হয়েছে: ${result.error || 'Unknown Error'}। তবে অর্ডারটি আপনার ড্যাশবোর্ডে পেন্ডিং আছে ভাই।`);
+                        alert(`❌ এপিআই প্রসেস ব্যর্থ হয়েছে: ${result.error || 'Unknown Provider Error'}। তবে অর্ডারটি আপনার ড্যাশবোর্ডে পেন্ডিং আছে ভাই।`);
                     }
                 } catch (error) {
                     console.error("Server API Error: ", error);
-                    alert("⚠️ আপনার ব্যাকএন্ড সার্ভারে সমস্যা হয়েছে। তবে অর্ডারটি ড্যাশবোর্ডে সেভ হয়েছে, অ্যাডমিন প্যানেল থেকে চেক করুন ভাই।");
+                    alert("⚠️ প্রোভাইডার সার্ভারে রিকোয়েস্ট পাঠানো যায়নি। তবে অর্ডারটি লোকাল ড্যাশবোর্ডে সেভ হয়েছে, অ্যাডমিন প্যানেল থেকে ম্যানুয়ালি চেক করুন ভাই।");
                 }
             } else {
                 alert("ℹ️ এটি একটি ম্যানুয়াল সার্ভিস, তাই অর্ডারটি সফলভাবে আপনার ড্যাশবোর্ডে জমা হলো।");
@@ -675,6 +719,7 @@
             closeModal('payment-gateway-modal');
         };
 
+        // স্টক অটো-রিস্টোর এবং ক্যানসেল লজিক
         window.adjustOrderStatus = function(orderId, stateLabel) {
             let targetOrder = orders.find(o => o.id === orderId); if(!targetOrder) return;
             if(stateLabel === 'Canceled' && targetOrder.status !== 'Canceled') { revertInventoryUnits(targetOrder.itemId, targetOrder.qty); }
@@ -717,7 +762,7 @@
 
             document.getElementById('services-container').innerHTML = filteredServices.map(s => {
                 let isSmm = (s.calcMode === 'smm');
-                let userSellingPrice = parseFloat(s.price) || 0; // পিওর প্রাইস রেন্ডার
+                let userSellingPrice = parseFloat(s.price) || 0;
                 return `
                 <div class="theme-bg border rounded-2xl p-4 flex flex-col justify-between relative">
                     <div>
@@ -740,7 +785,7 @@
             }).join('');
 
             document.getElementById('books-container').innerHTML = filteredBooks.map(b => {
-                let userBookPrice = parseFloat(b.price) || 0; // পিওর প্রাইস রেন্ডার
+                let userBookPrice = parseFloat(b.price) || 0;
                 return `
                 <div class="theme-bg border rounded-xl p-3 flex flex-col justify-between relative">
                     <div>
