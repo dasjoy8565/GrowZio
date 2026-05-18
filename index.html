@@ -91,7 +91,6 @@
             <div class="mb-6"><h2 class="text-lg font-black text-white flex items-center gap-2"><i class="fa-solid fa-book theme-text-accent"></i> E-Book Store & Resources</h2></div>
             <div id="books-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
         </section>
-
         <section id="user-tracking-section" class="hidden">
             <div class="theme-bg border rounded-2xl p-5 shadow-xl">
                 <h2 class="text-sm font-bold text-white mb-4 flex items-center gap-2"><i class="fa-solid fa-clock-history text-blue-400"></i> Your Orders & Status Dashboard</h2>
@@ -120,6 +119,21 @@
                     <h2 class="text-lg font-black text-white text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-500"><i class="fa-solid fa-shield-halved"></i> Controlled Management Terminal</h2>
                 </div>
                 <button onclick="lockAdminPanel()" class="bg-gray-900 hover:bg-gray-800 text-gray-400 text-xs px-3 py-1 rounded-lg border border-gray-800">Lock Terminal</button>
+            </div>
+
+            <div class="theme-bg border rounded-xl p-4 mb-6">
+                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-calculator text-yellow-400 mr-1"></i> SMM API Profit & Currency Converter Rates</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
+                    <div class="bg-gray-950 p-3 rounded-lg border border-gray-800 space-y-1">
+                        <label class="block text-[10px] font-bold text-blue-400">1 USD = কত টাকা (BDT)?</label>
+                        <input type="number" id="cfg-dollar-rate" step="0.1" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white font-mono outline-none">
+                    </div>
+                    <div class="bg-gray-950 p-3 rounded-lg border border-gray-800 space-y-1">
+                        <label class="block text-[10px] font-bold text-emerald-400">কত % লাভ যোগ করবেন (Profit Margin)?</label>
+                        <input type="number" id="cfg-profit-margin" placeholder="যেমন: 20" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white font-mono outline-none">
+                    </div>
+                </div>
+                <button onclick="commitApiPricingSettings()" class="mt-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-[11px] font-bold px-5 py-2 rounded-lg transition shadow-md">Save Profit & Rates Settings</button>
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
@@ -159,7 +173,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div class="theme-bg border rounded-xl p-4 space-y-3">
-                    <h3 class="text-xs font-bold text-white">Create New Service</h3>
+                    <h3 class="text-xs font-bold text-white">Create Custom Service (ম্যানুয়াল)</h3>
                     <form id="add-service-form" class="space-y-2">
                         <input type="text" id="srv-title" placeholder="Service Name" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required>
                         <div class="grid grid-cols-2 gap-2">
@@ -173,9 +187,9 @@
                                 <option value="smm">SMM 1,000 Pcs Mode</option>
                             </select>
                         </div>
-                        <input type="text" id="srv-api-id" placeholder="Main Panel Service ID (ঐচ্ছিক)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
+                        <input type="text" id="srv-api-id" placeholder="Main Panel Service ID (ফাঁকা রাখলে ম্যানুয়াল থাকবে)" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
                         <input type="file" id="srv-img" accept="image/*" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-1.5 text-xs text-gray-500">
-                        <button type="submit" class="w-full theme-accent text-white text-xs font-bold py-2 rounded-lg transition">Publish Item</button>
+                        <button type="submit" class="w-full theme-accent text-white text-xs font-bold py-2 rounded-lg transition">Publish Custom Item</button>
                     </form>
                 </div>
 
@@ -326,34 +340,6 @@
         </div>
     </div>
 
-    <div id="edit-prod-modal" class="modal">
-        <div class="bg-gray-900 border border-gray-800 rounded-xl w-full max-w-sm p-5 relative">
-            <button onclick="closeModal('edit-prod-modal')" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i class="fa-solid fa-times"></i></button>
-            <h3 class="text-xs font-bold text-white mb-3">Live Edit Database Parameters</h3>
-            <form id="edit-prod-form" class="space-y-3">
-                <input type="hidden" id="edit-id"><input type="hidden" id="edit-target-type">
-                <div><input type="text" id="edit-name" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><input type="number" id="edit-price" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
-                    <div><input type="number" id="edit-stock" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-white outline-none" required></div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <select id="edit-category" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 outline-none"></select>
-                    <select id="edit-calc-mode" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-bold outline-none">
-                        <option value="piece">Normal Piece Mode</option>
-                        <option value="smm">SMM 1,000 Pcs Mode</option>
-                    </select>
-                </div>
-                <input type="text" id="edit-api-id" placeholder="Main Panel Service ID" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs text-gray-400 font-mono outline-none">
-                <input type="file" id="edit-img" accept="image/*" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-1.5 text-xs text-gray-500">
-                <div class="flex justify-end space-x-2 pt-1">
-                    <button type="button" onclick="closeModal('edit-prod-modal')" class="bg-gray-800 text-gray-400 text-xs px-3 py-1.5 rounded-lg">Cancel</button>
-                    <button type="submit" class="theme-accent text-white text-xs px-4 py-1.5 rounded-lg font-bold">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <section class="max-w-7xl mx-auto px-4 pt-4 flex justify-center">
         <button onclick="triggerAdminAuth()" class="bg-gray-900/60 hover:bg-gray-900 text-gray-500 hover:text-gray-300 text-[11px] font-mono font-bold px-4 py-2 rounded-xl border border-gray-800/40 transition flex items-center space-x-1.5">
             <i class="fa-solid fa-user-shield text-xs opacity-70"></i> <span>Terminal Core Auth</span>
@@ -374,23 +360,25 @@
         applySystemTheme(savedThemeState);
         document.getElementById('global-theme-switcher').value = savedThemeState;
 
-        const initServices = [
-            { id: 's_1', name: 'Premium High-Quality Facebook Followers Pack', price: 250, cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400', stock: 1200, category: 'social', calcMode: 'piece', apiId: '' },
-            { id: 's_2', name: 'Instagram Automated Views (SMM)', price: 200, cover: 'https://images.unsplash.com/photo-1611267257453-772c7a1a72d9?w=400', stock: 50000, category: 'social', calcMode: 'smm', apiId: '1024' }
-        ];
-        const initBooks = [
+        // 💵 ডিফল্ট রেট এবং লাভ সেটিংস (লোকাল স্টোরেজ লোড)
+        let dollarRate = parseFloat(localStorage.getItem('gz_dollar_rate')) || 120.0;
+        let profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0; // ২০% লাভ
+
+        let manualServices = JSON.parse(localStorage.getItem('gz_services')) || [];
+        let apiServices = []; // এখানে OpsFollow-এর সার্ভিস অটো এসে জমা হবে
+        let books = JSON.parse(localStorage.getItem('gz_books')) || [
             { id: 'b_1', title: 'Advanced Digital Growth Marketing Secrets', author: 'GrowZio Labs', price: 120, cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300', stock: 240, category: 'books', calcMode: 'piece' }
         ];
-        const initCategories = [
+
+        let baseCategories = [
             { id: 'all', name: 'All Items', icon: 'fa-layer-group' },
-            { id: 'social', name: 'Social Media Packs', icon: 'fa-share-nodes' },
-            { id: 'topup', name: 'Digital Top-Ups', icon: 'fa-mobile-screen' },
             { id: 'books', name: 'Premium E-Books', icon: 'fa-book-open' }
         ];
+        let customCategories = JSON.parse(localStorage.getItem('gz_categories')) || [
+            { id: 'social', name: 'Social Media Packs', icon: 'fa-share-nodes' },
+            { id: 'topup', name: 'Digital Top-Ups', icon: 'fa-mobile-screen' }
+        ];
 
-        let services = JSON.parse(localStorage.getItem('gz_services')) || initServices;
-        let books = JSON.parse(localStorage.getItem('gz_books')) || initBooks;
-        let categories = JSON.parse(localStorage.getItem('gz_categories')) || initCategories;
         let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
         let users = JSON.parse(localStorage.getItem('gz_users')) || [];
         let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
@@ -404,10 +392,46 @@
         let chosenPaymentGateway = "";
         let currentFilterCategory = "all"; 
 
+        // 🔄 পেজ লোড হওয়ার সাথে সাথে API থেকে সব সার্ভিস আনার রিয়েলটাইম ফাংশন
+        async function fetchMainPanelServices() {
+            try {
+                let res = await fetch('/api/get-services');
+                if (res.ok) {
+                    let data = await res.json();
+                    if (Array.isArray(data)) {
+                        apiServices = data.map(item => {
+                            // 🧮 আপনার সেট করা ডলার রেট এবং লাভের পার্সেন্টেজ হিসাব করা
+                            let rawUsdPrice = parseFloat(item.rate); // মেইন প্যানেলের ১০০০ পিসের দাম ডলারে
+                            let costInBdt = rawUsdPrice * dollarRate;
+                            let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
+
+                            // ক্যাটাগরি তৈরি বা স্লগ ঠিক করা
+                            let catId = item.category.toLowerCase().replace(/[^a-z0-9]/g, '_');
+                            if (!customCategories.find(c => c.id === catId)) {
+                                customCategories.push({ id: catId, name: item.category, icon: 'fa-cube' });
+                            }
+
+                            return {
+                                id: 'api_' + item.service,
+                                name: item.name,
+                                price: finalPriceBdt,
+                                stock: 99999, // এপিআই সার্ভিসের আনলিমিটেড স্টক শো করা
+                                category: catId,
+                                calcMode: 'smm', // SMM প্যানেলের ডিফল্ট মোড
+                                apiId: item.service,
+                                cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
+                            };
+                        });
+                        localStorage.setItem('gz_categories', JSON.stringify(customCategories));
+                    }
+                }
+            } catch (err) { console.error("Error syncing live API services: ", err); }
+            refreshUserViewport();
+        }
+
         function persistPlatformStorage() {
-            localStorage.setItem('gz_services', JSON.stringify(services));
+            localStorage.setItem('gz_services', JSON.stringify(manualServices));
             localStorage.setItem('gz_books', JSON.stringify(books));
-            localStorage.setItem('gz_categories', JSON.stringify(categories));
             localStorage.setItem('gz_orders', JSON.stringify(orders));
             localStorage.setItem('gz_users', JSON.stringify(users));
             localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
@@ -424,29 +448,35 @@
         };
 
         window.filterContentByCategory = function(category) { currentFilterCategory = category; refreshUserViewport(); };
-
         window.addNewCustomCategory = function() {
             let inputNode = document.getElementById('new-cat-name');
             let name = inputNode.value.trim(); if(!name) return alert("Enter a valid category name!");
-            categories.push({ id: 'cat_' + Date.now(), name: name, icon: 'fa-folder' });
-            inputNode.value = ""; persistPlatformStorage(); alert(`✅ Category added!`);
+            customCategories.push({ id: 'cat_' + Date.now(), name: name, icon: 'fa-folder' });
+            inputNode.value = ""; localStorage.setItem('gz_categories', JSON.stringify(customCategories)); refreshUserViewport(); alert(`✅ Category added!`);
         };
 
-        let cacheSrvBase64 = "", cacheBkBase64 = "", cacheEditBase64 = "";
+        window.commitApiPricingSettings = function() {
+            let rateInput = document.getElementById('cfg-dollar-rate').value;
+            let marginInput = document.getElementById('cfg-profit-margin').value;
+            if(!rateInput || !marginInput) return alert("দয়া করে সঠিক তথ্য দিন ভাই!");
+            dollarRate = parseFloat(rateInput);
+            profitMargin = parseFloat(marginInput);
+            localStorage.setItem('gz_dollar_rate', dollarRate);
+            localStorage.setItem('gz_profit_margin', profitMargin);
+            alert("⚙️ লাভ এবং ডলার কনভার্ট রেট সফলভাবে সেভ হয়েছে! আপনার সম্পূর্ণ সাইটের দাম এখন লাইভ আপডেট হয়ে গেছে।");
+            fetchMainPanelServices(); // নতুন রেট অনুযায়ী রিলোড করা
+        };
+
+        let cacheSrvBase64 = "", cacheBkBase64 = "";
         document.getElementById('srv-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheSrvBase64=ev.target.result;}; r.readAsDataURL(f); } });
         document.getElementById('bk-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheBkBase64=ev.target.result;}; r.readAsDataURL(f); } });
-        document.getElementById('edit-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheEditBase64=ev.target.result;}; r.readAsDataURL(f); } });
-
-        let cacheBkashLogo = "", cacheNagadLogo = "", cacheRocketLogo = "", cacheUpayLogo = "";
-        document.getElementById('cfg-bkash-img').addEventListener('change', function(e){ let f = e.target.files[0]; if(f){ let r=new FileReader(); r.onload=function(ev){cacheBkashLogo=ev.target.result;}; r.readAsDataURL(f); } });
-        document.getElementById('cfg-nagad-img').addEventListener('change', function(e){ let f = e.target.files[0]; if(f){ let r=new FileReader(); r.onload=function(ev){cacheNagadLogo=ev.target.result;}; r.readAsDataURL(f); } });
-        document.getElementById('cfg-rocket-img').addEventListener('change', function(e){ let f = e.target.files[0]; if(f){ let r=new FileReader(); r.onload=function(ev){cacheRocketLogo=ev.target.result;}; r.readAsDataURL(f); } });
-        document.getElementById('cfg-upay-img').addEventListener('change', function(e){ let f = e.target.files[0]; if(f){ let r=new FileReader(); r.onload=function(ev){cacheUpayLogo=ev.target.result;}; r.readAsDataURL(f); } });
 
         window.triggerAdminAuth = function() {
             const passKey = prompt("🔒 Enter Dashboard Admin Security Key:");
             if (passKey === "1357") { 
                 document.getElementById('admin-secured-panel').classList.remove('hidden');
+                document.getElementById('cfg-dollar-rate').value = dollarRate;
+                document.getElementById('cfg-profit-margin').value = profitMargin;
                 document.getElementById('cfg-bkash').value = walletNumbers.bKash;
                 document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
                 document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
@@ -463,13 +493,25 @@
             walletNumbers.Nagad = document.getElementById('cfg-nagad').value.trim();
             walletNumbers.Rocket = document.getElementById('cfg-rocket').value.trim();
             walletNumbers.Upay = document.getElementById('cfg-upay').value.trim();
-            if(cacheBkashLogo) walletLogos.bKash = cacheBkashLogo;
-            if(cacheNagadLogo) walletLogos.Nagad = cacheNagadLogo;
-            if(cacheRocketLogo) walletLogos.Rocket = cacheRocketLogo;
-            if(cacheUpayLogo) walletLogos.Upay = cacheUpayLogo;
             persistPlatformStorage(); alert("✅ Manual gateways updated.");
         };
 
+        document.getElementById('add-service-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            manualServices.push({ 
+                id: 'man_' + Date.now(), 
+                name: document.getElementById('srv-title').value.trim(), 
+                price: parseFloat(document.getElementById('srv-price').value), 
+                stock: parseInt(document.getElementById('srv-stock').value), 
+                category: document.getElementById('srv-category').value,
+                calcMode: document.getElementById('srv-calc-mode').value,
+                apiId: document.getElementById('srv-api-id').value.trim(),
+                cover: cacheSrvBase64 || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' 
+            });
+            e.target.reset(); cacheSrvBase64=""; persistPlatformStorage(); alert("ম্যানুয়াল সার্ভিস পাবলিশ হয়েছে ভাই!");
+        });
+
+        // Auth Logic
         document.getElementById('auth-signup-form').addEventListener('submit', (e) => {
             e.preventDefault();
             let mail = document.getElementById('reg-email').value.trim();
@@ -487,76 +529,12 @@
 
         window.logoutSession = function() { activeUser = null; persistPlatformStorage(); };
 
-        document.getElementById('add-service-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            services.push({ 
-                id: 's_' + Date.now(), 
-                name: document.getElementById('srv-title').value.trim(), 
-                price: parseFloat(document.getElementById('srv-price').value), 
-                stock: parseInt(document.getElementById('srv-stock').value), 
-                category: document.getElementById('srv-category').value,
-                calcMode: document.getElementById('srv-calc-mode').value,
-                apiId: document.getElementById('srv-api-id').value.trim(),
-                cover: cacheSrvBase64 || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400' 
-            });
-            e.target.reset(); cacheSrvBase64=""; persistPlatformStorage(); alert("Service Published!");
-        });
-
-        document.getElementById('add-book-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            books.push({ id: 'b_' + Date.now(), title: document.getElementById('bk-title').value.trim(), author: document.getElementById('bk-author').value.trim(), price: parseFloat(document.getElementById('bk-price').value), stock: parseInt(document.getElementById('bk-stock').value), category: 'books', calcMode: 'piece', cover: cacheBkBase64 || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300' });
-            e.target.reset(); cacheBkBase64=""; persistPlatformStorage(); alert("E-Book Published!");
-        });
-
-        window.triggerEditForm = function(id, schemaType) {
-            let item = (schemaType === 'service') ? services.find(s => s.id === id) : books.find(b => b.id === id);
-            if(!item) return;
-            document.getElementById('edit-id').value = item.id;
-            document.getElementById('edit-target-type').value = schemaType;
-            document.getElementById('edit-name').value = item.name || item.title;
-            document.getElementById('edit-price').value = item.price;
-            document.getElementById('edit-stock').value = item.stock;
-            if(schemaType === 'service') {
-                document.getElementById('edit-category').style.display = "block";
-                document.getElementById('edit-calc-mode').style.display = "block";
-                document.getElementById('edit-api-id').style.display = "block";
-                document.getElementById('edit-category').value = item.category || 'social';
-                document.getElementById('edit-calc-mode').value = item.calcMode || 'piece';
-                document.getElementById('edit-api-id').value = item.apiId || '';
-            } else {
-                document.getElementById('edit-category').style.display = "none";
-                document.getElementById('edit-calc-mode').style.display = "none";
-                document.getElementById('edit-api-id').style.display = "none";
-            }
-            openModal('edit-prod-modal');
-        };
-
-        document.getElementById('edit-prod-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            let targetId = document.getElementById('edit-id').value;
-            let type = document.getElementById('edit-target-type').value;
-            if(type === 'service') {
-                let node = services.find(s => s.id === targetId);
-                if(node) { 
-                    node.name = document.getElementById('edit-name').value.trim(); 
-                    node.price = parseFloat(document.getElementById('edit-price').value); 
-                    node.stock = parseInt(document.getElementById('edit-stock').value); 
-                    node.category = document.getElementById('edit-category').value; 
-                    node.calcMode = document.getElementById('edit-calc-mode').value;
-                    node.apiId = document.getElementById('edit-api-id').value.trim();
-                    if(cacheEditBase64) node.cover = cacheEditBase64; 
-                }
-            } else {
-                let node = books.find(b => b.id === targetId);
-                if(node) { node.title = document.getElementById('edit-name').value.trim(); node.price = parseFloat(document.getElementById('edit-price').value); node.stock = parseInt(document.getElementById('edit-stock').value); if(cacheEditBase64) node.cover = cacheEditBase64; }
-            }
-            closeModal('edit-prod-modal'); persistPlatformStorage(); alert("Updated parameters.");
-        });
-
         window.launchPaymentGateway = function(id) {
             if(!activeUser) { alert("🔒 Please log in first."); openModal('auth-modal'); return; }
-            currentActiveItem = services.find(s => s.id === id) || books.find(b => b.id === id);
+            // API এবং ম্যানুয়াল দুই লিস্ট থেকেই ডাটা চেক করা
+            currentActiveItem = apiServices.find(s => s.id === id) || manualServices.find(s => s.id === id) || books.find(b => b.id === id);
             if(!currentActiveItem || currentActiveItem.stock < 1) return alert("🛑 Out of stock.");
+            
             document.getElementById('modal-img-bkash').src = walletLogos.bKash;
             document.getElementById('modal-img-nagad').src = walletLogos.Nagad;
             document.getElementById('modal-img-rocket').src = walletLogos.Rocket;
@@ -564,9 +542,10 @@
             document.getElementById('gate-target-address').value = "";
             document.getElementById('gate-trxid-value').value = "";
             document.getElementById('step1-item-name').innerText = currentActiveItem.name || currentActiveItem.title;
+            
             if(currentActiveItem.calcMode === 'smm') {
-                document.getElementById('step1-calc-hint').innerText = "SMM Engine (Rate per 1,000 Pcs)";
-                document.getElementById('gate-qty-label').innerText = "Enter Quantity";
+                document.getElementById('step1-calc-hint').innerText = "SMM Auto Engine Mode (৳ Rate per 1,000)";
+                document.getElementById('gate-qty-label').innerText = "Enter Quantity (Min 100)";
                 document.getElementById('gate-qty-counter').value = 1000;
             } else {
                 document.getElementById('step1-calc-hint').innerText = "Standard Piece Mode";
@@ -586,7 +565,7 @@
             if(!currentActiveItem) return;
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
-            document.getElementById('step1-total-price').innerText = `${finalPrice} BDT`;
+            document.getElementById('step1-total-price').innerText = `${Math.ceil(finalPrice)} BDT`;
         };
 
         window.proceedToStepTwo = function() { if(!document.getElementById('gate-target-address').value.trim()) return alert("Enter link/details."); toggleGatewayStep(2); };
@@ -599,15 +578,12 @@
             document.getElementById('gate-display-num').innerText = walletNumbers[walletBrand];
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
-            document.getElementById('gate-display-amt').innerText = `${finalPrice} BDT`;
+            document.getElementById('gate-display-amt').innerText = `${Math.ceil(finalPrice)} BDT`;
             toggleGatewayStep(3);
         };
 
         window.copyClipText = function(id) { navigator.clipboard.writeText(document.getElementById(id).innerText.replace(" BDT", "")); alert("📋 Copied!"); };
 
-        // ========================================================
-        // 🚀 সুরক্ষিত ব্যাকএন্ড সার্ভারে রিকোয়েস্ট পাঠানো
-        // ========================================================
         window.executeFinalCheckoutSubmit = async function() {
             let trx = document.getElementById('gate-trxid-value').value.trim();
             let targetAddr = document.getElementById('gate-target-address').value.trim();
@@ -615,16 +591,13 @@
             let verifyBtn = document.getElementById('btn-verify-order');
 
             if(!trx) return alert("Please specify Transaction ID.");
-            if(finalQty > currentActiveItem.stock) return alert("System stock limits overflow.");
 
-            // লোডিং স্টেট দেখানো
             verifyBtn.innerText = "Processing...";
             verifyBtn.disabled = true;
 
             let orderId = 'GZ-' + Math.floor(100000 + Math.random() * 900000);
+            if(currentActiveItem.id.startsWith('man_')) { currentActiveItem.stock -= finalQty; }
             
-            // ডাটাবেজ আপডেট ও লোকাল সেভ
-            currentActiveItem.stock -= finalQty;
             let newOrder = {
                 id: orderId,
                 userEmail: activeUser.email,
@@ -637,13 +610,13 @@
                 trxId: trx,
                 status: 'Pending'
             };
+
             orders.push(newOrder);
             persistPlatformStorage();
 
-            // যদি এটি একটি API সার্ভিস হয় তবে আপনার নিজস্ব সুরক্ষিত ব্যাকএন্ডে রিকোয়েস্ট পাঠানো হবে
             if(currentActiveItem.apiId && currentActiveItem.apiId !== "") {
                 try {
-                    let response = await fetch('/api/order', {
+                    let response = await fetch('/api/place-order', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -664,14 +637,12 @@
                         alert(`❌ এপিআই প্রসেস ব্যর্থ হয়েছে: ${result.error || 'Unknown Error'}। তবে অর্ডারটি আপনার ড্যাশবোর্ডে পেন্ডিং আছে ভাই।`);
                     }
                 } catch (error) {
-                    console.error("Server API Error: ", error);
-                    alert("⚠️ আপনার ব্যাকএন্ড সার্ভারে সমস্যা হয়েছে। তবে অর্ডারটি ড্যাশবোর্ডে সেভ হয়েছে, অ্যাডমিন প্যানেল থেকে চেক করুন ভাই।");
+                    alert("⚠️ আপনার ব্যাকএন্ড ফাংশনে কানেক্ট করা যায়নি। তবে অর্ডারটি ড্যাশবোর্ডে সেভ হয়েছে ভাই।");
                 }
             } else {
                 alert("ℹ️ এটি একটি ম্যানুয়াল সার্ভিস, তাই অর্ডারটি সফলভাবে আপনার ড্যাশবোর্ডে জমা হলো।");
             }
 
-            // রিসেট ও মডাল ক্লোজ
             verifyBtn.innerText = "Verify Order";
             verifyBtn.disabled = false;
             closeModal('payment-gateway-modal');
@@ -679,20 +650,14 @@
 
         window.adjustOrderStatus = function(orderId, stateLabel) {
             let targetOrder = orders.find(o => o.id === orderId); if(!targetOrder) return;
-            if(stateLabel === 'Canceled' && targetOrder.status !== 'Canceled') { revertInventoryUnits(targetOrder.itemId, targetOrder.qty); }
-            else if (targetOrder.status === 'Canceled' && stateLabel !== 'Canceled') { let rootNode = services.find(s => s.id === targetOrder.itemId) || books.find(b => b.id === targetOrder.itemId); if(rootNode) rootNode.stock -= targetOrder.qty; }
             targetOrder.status = stateLabel; persistPlatformStorage();
         };
 
         window.removeOrderLogEntry = function(orderId) {
-            let idx = orders.findIndex(o => o.id === orderId); if(idx === -1) return;
-            if(orders[idx].status !== 'Canceled') revertInventoryUnits(orders[idx].itemId, orders[idx].qty);
-            orders.splice(idx, 1); persistPlatformStorage();
+            orders = orders.filter(o => o.id !== orderId); persistPlatformStorage();
         };
 
-        function revertInventoryUnits(uid, volume) { let asset = services.find(s => s.id === uid) || books.find(b => b.id === uid); if(asset) asset.stock += volume; }
-        window.deleteServiceNode = function(id) { services = services.filter(s => s.id !== id); persistPlatformStorage(); };
-        window.deleteBookNode = function(id) { books = books.filter(b => b.id !== id); persistPlatformStorage(); };
+        window.deleteServiceNode = function(id) { manualServices = manualServices.filter(s => s.id !== id); persistPlatformStorage(); };
 
         function refreshUserViewport() {
             if(activeUser) {
@@ -701,17 +666,20 @@
             } else {
                 document.getElementById('auth-zone').classList.remove('hidden'); document.getElementById('profile-zone').classList.add('hidden'); document.getElementById('user-tracking-section').classList.add('hidden');
             }
+
             let adminFlag = document.getElementById('admin-secured-panel').classList.contains('hidden');
-            document.getElementById('dynamic-category-bar').innerHTML = categories.map(cat => {
+            let combinedCategories = [...baseCategories, ...customCategories];
+            
+            document.getElementById('dynamic-category-bar').innerHTML = combinedCategories.map(cat => {
                 let isActive = currentFilterCategory === cat.id;
                 return `<button onclick="filterContentByCategory('${cat.id}')" class="${isActive ? 'px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-xl transition shadow-md whitespace-nowrap' : 'px-4 py-2 bg-gray-900 hover:bg-gray-800 text-gray-300 text-xs font-bold rounded-xl border border-gray-800 transition whitespace-nowrap'}"><i class="fa-solid ${cat.icon} mr-1 theme-text-accent"></i> ${cat.name}</button>`;
             }).join('');
 
-            let selectOptionsHtml = categories.filter(c => c.id !== 'all' && c.id !== 'books').map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-            document.getElementById('srv-category').innerHTML = selectOptionsHtml;
-            document.getElementById('edit-category').innerHTML = selectOptionsHtml;
+            document.getElementById('srv-category').innerHTML = customCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
-            let filteredServices = (currentFilterCategory !== "all" && currentFilterCategory !== 'books') ? services.filter(s => s.category === currentFilterCategory) : (currentFilterCategory === 'books' ? [] : services);
+            // এপিআই এবং ম্যানুয়াল দুই ধরণের সার্ভিস একত্রিত করা
+            let allServices = [...manualServices, ...apiServices];
+            let filteredServices = (currentFilterCategory !== "all" && currentFilterCategory !== 'books') ? allServices.filter(s => s.category === currentFilterCategory) : (currentFilterCategory === 'books' ? [] : allServices);
             let filteredBooks = (currentFilterCategory === "all" || currentFilterCategory === 'books') ? books : [];
 
             document.getElementById('section-services').style.display = (currentFilterCategory === 'books') ? "none" : "block";
@@ -719,22 +687,22 @@
 
             document.getElementById('services-container').innerHTML = filteredServices.map(s => {
                 let isSmm = (s.calcMode === 'smm');
+                let isApiNode = s.id.startsWith('api_');
                 return `
                 <div class="theme-bg border rounded-2xl p-4 flex flex-col justify-between relative">
                     <div>
                         <div class="aspect-[16/10] bg-gray-950 rounded-xl mb-3 overflow-hidden border border-gray-900"><img src="${s.cover}" class="w-full h-full object-cover"></div>
                         <h4 class="text-xs font-bold text-gray-200 line-clamp-2">${s.name}</h4>
                         <div class="flex gap-2 mt-1">
-                            <span class="text-[9px] px-2 py-0.5 rounded font-mono bg-gray-950 text-gray-400 border border-gray-900">${isSmm ? 'SMM Mode' : 'Piece Mode'}</span>
-                            ${s.apiId ? `<span class="text-[9px] px-2 py-0.5 rounded font-mono bg-blue-950 text-blue-400 border border-blue-900/40">API Active (${s.apiId})</span>` : ''}
+                            <span class="text-[9px] px-2 py-0.5 rounded font-mono bg-gray-950 text-gray-400 border border-gray-900">${isApiNode ? 'Auto Live API' : 'Manual Store'}</span>
+                            ${s.apiId ? `<span class="text-[9px] px-2 py-0.5 rounded font-mono bg-blue-950 text-blue-400 border border-blue-900/40">ID: ${s.apiId}</span>` : ''}
                         </div>
                     </div>
                     <div class="mt-4 flex items-center justify-between">
-                        <div><p class="text-[10px] text-gray-500 font-mono">Stock: ${s.stock}</p><p class="text-sm font-black theme-text-accent">${isSmm ? `৳${s.price} <span class="text-[10px] text-gray-500 font-normal">/1K</span>` : `৳${s.price}`}</p></div>
+                        <div><p class="text-[10px] text-gray-500 font-mono">${isApiNode ? 'Stock: Unlimited' : `Stock: ${s.stock}`}</p><p class="text-sm font-black theme-text-accent">${isSmm ? `৳${s.price} <span class="text-[10px] text-gray-500 font-normal">/1K</span>` : `৳${s.price}`}</p></div>
                         <button onclick="launchPaymentGateway('${s.id}')" class="bg-gray-900 hover:bg-gray-800 text-white text-[11px] font-bold px-4 py-2 rounded-xl border border-gray-800 transition">Order</button>
                     </div>
-                    <div class="absolute top-6 right-6 flex space-x-1 ${adminFlag ? 'hidden' : ''}">
-                        <button onclick="triggerEditForm('${s.id}', 'service')" class="p-1 bg-blue-600 text-white text-[10px] rounded-full"><i class="fa-solid fa-pen"></i></button>
+                    <div class="absolute top-6 right-6 ${adminFlag || isApiNode ? 'hidden' : ''}">
                         <button onclick="deleteServiceNode('${s.id}')" class="p-1 bg-gray-950 text-gray-400 hover:text-red-400 text-[10px] rounded-full"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>`;
@@ -760,10 +728,12 @@
             }
 
             document.getElementById('admin-orders-rows').innerHTML = orders.map(o => `
-                <tr class="hover:bg-gray-900/40"><td class="px-4 py-2 font-mono text-gray-400">${o.id}</td><td class="px-4 py-2"><b>${o.userName}</b><br>${o.userEmail}</td><td class="px-4 py-2">${o.itemName}</td><td class="px-4 py-2">${o.target}</td><td class="px-4 py-2">${o.qty}</td><td class="px-4 py-2 text-blue-400 font-bold">${o.method}</td><td class="px-4 py-2 font-mono text-purple-400">${o.trxId}</td><td><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':o.status==='Canceled'?'bg-red-500/10 text-red-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td><td class="px-4 py-2 text-right space-x-0.5 whitespace-nowrap"><button onclick="adjustOrderStatus('${o.id}', 'Completed')" class="text-[10px] bg-gray-950 text-green-400 p-1 rounded border border-gray-800"><i class="fa-solid fa-check"></i></button><button onclick="adjustOrderStatus('${o.id}', 'Canceled')" class="text-[10px] bg-gray-950 text-red-400 p-1 rounded border border-gray-800"><i class="fa-solid fa-ban"></i></button><button onclick="removeOrderLogEntry('${o.id}')" class="text-[10px] bg-gray-950 text-rose-500 p-1 rounded border border-gray-800"><i class="fa-solid fa-trash-can"></i></button></td></tr>`).join('');
+                <tr class="hover:bg-gray-900/40"><td class="px-4 py-2 font-mono text-gray-400">${o.id}</td><td class="px-4 py-2"><b>${o.userName}</b><br>${o.userEmail}</td><td class="px-4 py-2">${o.itemName}</td><td class="px-4 py-2">${o.target}</td><td class="px-4 py-2">${o.qty}</td><td class="px-4 py-2 text-blue-400 font-bold">${o.method}</td><td class="px-4 py-2 font-mono text-purple-400">${o.trxId}</td><td><span class="px-2 py-0.5 rounded text-[10px] ${o.status==='Completed'?'bg-green-500/10 text-green-400':o.status==='Canceled'?'bg-red-500/10 text-red-400':'bg-amber-500/10 text-amber-400'}">${o.status}</span></td><td class="px-4 py-2 text-right space-x-0.5 whitespace-nowrap"><button onclick="adjustOrderStatus('${o.id}', 'Completed')" class="text-[10px] bg-gray-950 text-green-400 p-1 rounded border border-gray-800"><i class="fa-solid fa-check"></i></button><button onclick="adjustOrderStatus(adjustOrderStatus('${o.id}', 'Canceled')" class="text-[10px] bg-gray-950 text-red-400 p-1 rounded border border-gray-800"><i class="fa-solid fa-ban"></i></button><button onclick="removeOrderLogEntry('${o.id}')" class="text-[10px] bg-gray-950 text-rose-500 p-1 rounded border border-gray-800"><i class="fa-solid fa-trash-can"></i></button></td></tr>`).join('');
         }
 
-        refreshUserViewport();
+        // ইনিশিয়াল ডাটা কল
+        fetchMainPanelServices();
     </script>
 </body>
 </html>
+                
