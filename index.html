@@ -36,8 +36,8 @@
         .theme-text-accent { color: var(--accent-color); }
         .theme-border-accent { border-color: var(--accent-color); }
         
-        .category-avatar-btn { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 78px; padding: 6px; border-radius: 16px; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
-        .category-avatar-btn .icon-box { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #fff; margin-bottom: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease; }
+        .category-avatar-btn { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 72px; padding: 6px; border-radius: 16px; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.03); cursor: pointer; }
+        .category-avatar-btn .icon-box { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; margin-bottom: 4px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.2s ease; }
         .category-avatar-btn:hover .icon-box { transform: scale(1.08); }
         .category-avatar-btn.active-cat { background-color: rgba(255,255,255,0.05); border-color: var(--accent-color); }
         .category-avatar-btn.active-cat .icon-box { box-shadow: 0 0 12px var(--accent-color); }
@@ -140,25 +140,6 @@
                 <button onclick="lockAdminPanel()" class="bg-gray-900 hover:bg-gray-800 text-gray-400 text-xs px-3 py-1 rounded-lg border border-gray-800">Lock Terminal</button>
             </div>
 
-            <div class="theme-bg border rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-950/40">
-                <div class="space-y-2">
-                    <h4 class="text-xs font-bold text-blue-400 flex items-center gap-1.5"><i class="fa-solid fa-share-nodes"></i> PC/Phone Data Sync (ডিভাইস সিঙ্ক মেকানিজম)</h4>
-                    <p class="text-[11px] text-gray-400">এক ডিভাইসের রেট/মার্জিন অন্য ডিভাইসে হুবহু কপি করার জন্য নিচের কোডটি কপি করে অন্য ফোনের বক্সে পেস্ট করুন।</p>
-                    <div class="flex items-center space-x-2">
-                        <input type="text" id="sync-code-output" readonly class="flex-1 bg-gray-900 border border-gray-800 rounded px-2 py-1.5 text-[11px] text-emerald-400 font-mono outline-none truncate">
-                        <button onclick="copySyncCode()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded transition whitespace-nowrap">Copy Code</button>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <h4 class="text-xs font-bold text-orange-400 flex items-center gap-1.5"><i class="fa-solid fa-right-to-bracket"></i> Import Sync Code (অন্য ডিভাইস থেকে ডাটা আনুন)</h4>
-                    <p class="text-[11px] text-gray-400">অন্য পিসি/মোবাইলের জেনারেট করা কোডটি এখানে পেস্ট করে ইমপোর্ট দিন।</p>
-                    <div class="flex items-center space-x-2">
-                        <input type="text" id="sync-code-input" placeholder="এখানে সিঙ্ক কোড পেস্ট করুন..." class="flex-1 bg-gray-900 border border-gray-800 rounded px-2 py-1.5 text-[11px] text-white outline-none">
-                        <button onclick="importSyncCode()" class="bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded transition whitespace-nowrap">Import Now</button>
-                    </div>
-                </div>
-            </div>
-
             <div class="theme-bg border rounded-xl p-4 mb-6">
                 <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-calculator text-yellow-400 mr-1"></i> SMM API Profit & Currency Converter Rates</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
@@ -175,26 +156,30 @@
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
-                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-wallet text-pink-500 mr-1"></i> Gateway Dynamic Numbers</h3>
+                <h3 class="text-xs font-bold text-white mb-3"><i class="fa-solid fa-wallet text-pink-500 mr-1"></i> Gateway Dynamic Numbers & Custom Logos</h3>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-pink-500">bKash Channel:</label>
                         <input type="text" id="cfg-bkash" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
+                        <input type="file" id="cfg-bkash-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-orange-500">Nagad Channel:</label>
                         <input type="text" id="cfg-nagad" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
+                        <input type="file" id="cfg-nagad-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-purple-400">Rocket Channel:</label>
                         <input type="text" id="cfg-rocket" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
+                        <input type="file" id="cfg-rocket-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                     <div class="bg-gray-950 p-2.5 rounded-lg border border-gray-800 space-y-2">
                         <label class="block text-[10px] font-bold text-blue-400">Upay Channel:</label>
                         <input type="text" id="cfg-upay" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white outline-none">
+                        <input type="file" id="cfg-upay-img" accept="image/*" class="w-full text-[9px] text-gray-500">
                     </div>
                 </div>
-                <button onclick="commitAdminWallets()" class="mt-3 theme-accent text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save Gateways</button>
+                <button onclick="commitAdminWallets()" class="mt-3 theme-accent text-white text-[11px] font-bold px-4 py-1.5 rounded-lg transition">Save Gateways & Images</button>
             </div>
 
             <div class="theme-bg border rounded-xl p-4 mb-6">
@@ -256,6 +241,7 @@
                                 <th class="px-4 py-2.5">Gateway</th>
                                 <th class="px-4 py-2.5">Trx ID</th>
                                 <th class="px-4 py-2.5">Status</th>
+                                <th class="px-4 py-2.5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="admin-orders-rows" class="divide-y divide-gray-900"></tbody>
@@ -300,20 +286,20 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3 pt-2">
                     <div onclick="finalizeWithWallet('bKash')" class="wallet-card bg-gray-50 border border-gray-100 rounded-2xl p-3 flex flex-col items-center justify-center">
-                        <div class="w-12 h-12 rounded-xl bg-pink-600 text-white flex items-center justify-center font-black text-xs shadow-sm mb-1">bKash</div>
-                        <span class="text-xs text-gray-800 font-bold mt-1">bKash</span>
+                        <img id="modal-img-bkash" src="" class="h-10 w-10 object-contain rounded-xl">
+                        <span class="text-xs text-gray-800 font-bold mt-2">bKash</span>
                     </div>
                     <div onclick="finalizeWithWallet('Nagad')" class="wallet-card bg-gray-50 border border-gray-100 rounded-2xl p-3 flex flex-col items-center justify-center">
-                        <div class="w-12 h-12 rounded-xl bg-orange-500 text-white flex items-center justify-center font-black text-xs shadow-sm mb-1">Nagad</div>
-                        <span class="text-xs text-gray-800 font-bold mt-1">Nagad</span>
+                        <img id="modal-img-nagad" src="" class="h-10 w-10 object-contain rounded-xl">
+                        <span class="text-xs text-gray-800 font-bold mt-2">Nagad</span>
                     </div>
                     <div onclick="finalizeWithWallet('Rocket')" class="wallet-card bg-gray-50 border border-gray-100 rounded-2xl p-3 flex flex-col items-center justify-center">
-                        <div class="w-12 h-12 rounded-xl bg-purple-700 text-white flex items-center justify-center font-black text-xs shadow-sm mb-1">Rocket</div>
-                        <span class="text-xs text-gray-800 font-bold mt-1">Rocket</span>
+                        <img id="modal-img-rocket" src="" class="h-10 w-10 object-contain rounded-xl">
+                        <span class="text-xs text-gray-800 font-bold mt-2">Rocket</span>
                     </div>
                     <div onclick="finalizeWithWallet('Upay')" class="wallet-card bg-gray-50 border border-gray-100 rounded-2xl p-3 flex flex-col items-center justify-center">
-                        <div class="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs shadow-sm mb-1">Upay</div>
-                        <span class="text-xs text-gray-800 font-bold mt-1">Upay</span>
+                        <img id="modal-img-upay" src="" class="h-10 w-10 object-contain rounded-xl">
+                        <span class="text-xs text-gray-800 font-bold mt-2">Upay</span>
                     </div>
                 </div>
             </div>
@@ -360,6 +346,16 @@
                 </form>
                 <p class="text-[11px] text-gray-500 mt-3 text-center">Need an account? <button onclick="toggleAuthFrames(false)" class="text-blue-400 hover:underline">Register</button></p>
             </div>
+            <div id="signup-module-box" class="hidden">
+                <h3 class="text-md font-bold text-white mb-4 text-center">Create Account</h3>
+                <form id="auth-signup-form" class="space-y-3">
+                    <input type="text" id="reg-name" placeholder="Full Name" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
+                    <input type="email" id="reg-email" placeholder="Email Address" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
+                    <input type="password" id="reg-pass" placeholder="Password" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2.5 text-xs text-white outline-none" required>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-lg text-xs transition">Sign Up</button>
+                </form>
+                <p class="text-[11px] text-gray-500 mt-3 text-center">Already registered? <button onclick="toggleAuthFrames(true)" class="text-blue-400 hover:underline">Login</button></p>
+            </div>
         </div>
     </div>
 
@@ -383,85 +379,142 @@
         applySystemTheme(savedThemeState);
         document.getElementById('global-theme-switcher').value = savedThemeState;
 
+        // LIVE PRICING SYNCHRONIZER ENGINE (LOCAL STORAGE BROADCAST & RE-VALIDATOR)
         let dollarRate = parseFloat(localStorage.getItem('gz_dollar_rate')) || 120.0;
         let profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0;
 
         let manualServices = JSON.parse(localStorage.getItem('gz_services')) || [];
-        let apiServicesRaw = []; 
         let apiServices = []; 
         let books = JSON.parse(localStorage.getItem('gz_books')) || [
             { id: 'b_1', title: 'Advanced Digital Growth Marketing Secrets', author: 'GrowZio Labs', price: 120, cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300', stock: 240, category: 'books', calcMode: 'piece' }
         ];
 
         const coreCategoriesConfig = {
-            'all': { name: 'All Items', icon: 'fa-solid fa-layer-group', color: 'bg-gradient-to-tr from-blue-600 to-indigo-600' },
-            'books': { name: 'E-Books', icon: 'fa-solid fa-book-open', color: 'bg-gradient-to-tr from-emerald-600 to-teal-500' },
+            'all': { name: 'All Items', icon: 'fa-layer-group', color: 'bg-gradient-to-tr from-blue-600 to-indigo-600' },
+            'books': { name: 'E-Books', icon: 'fa-book-open', color: 'bg-gradient-to-tr from-emerald-600 to-teal-500' },
             'tiktok': { name: 'TikTok', icon: 'fa-brands fa-tiktok', color: 'bg-black border border-gray-800' },
             'facebook': { name: 'Facebook', icon: 'fa-brands fa-facebook-f', color: 'bg-[#1877F2]' },
             'instagram': { name: 'Instagram', icon: 'fa-brands fa-instagram', color: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7]' },
             'youtube': { name: 'YouTube', icon: 'fa-brands fa-youtube', color: 'bg-[#FF0000]' },
             'telegram': { name: 'Telegram', icon: 'fa-brands fa-telegram', color: 'bg-[#24A1DE]' },
             'twitter': { name: 'Twitter/X', icon: 'fa-brands fa-x-twitter', color: 'bg-gray-900' },
-            'topup': { name: 'Top-Ups', icon: 'fa-solid fa-mobile-screen', color: 'bg-gradient-to-tr from-amber-500 to-orange-600' },
-            'canva_premium': { name: 'Canva', icon: 'fa-solid fa-crown', color: 'bg-indigo-500' },
-            'own_service': { name: 'Own Srv', icon: 'fa-solid fa-gears', color: 'bg-purple-600' },
-            'freefire': { name: 'Freefire', icon: 'fa-solid fa-gamepad', color: 'bg-orange-600' }
+            'topup': { name: 'Top-Ups', icon: 'fa-solid fa-mobile-screen', color: 'bg-gradient-to-tr from-amber-500 to-orange-600' }
         };
 
         let currentFilterCategory = "all"; 
         let searchQueryStr = ""; 
 
-        // 🔄 Raw API ডেটা প্রসেসিং মেকানিজম (লাইভ রেট আপডেটের জন্য ফিক্সড)
-        function processApiServices() {
-            if (!Array.isArray(apiServicesRaw)) return;
-            apiServices = apiServicesRaw.map(item => {
-                let rawUsdPrice = parseFloat(item.rate); 
-                let costInBdt = rawUsdPrice * dollarRate;
-                let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
-
-                let rawCat = item.category.toLowerCase();
-                let catId = 'other';
-                if (rawCat.includes('tiktok')) catId = 'tiktok';
-                else if (rawCat.includes('facebook') || rawCat.includes('fb')) catId = 'facebook';
-                else if (rawCat.includes('instagram') || rawCat.includes('ig')) catId = 'instagram';
-                else if (rawCat.includes('youtube') || rawCat.includes('yt')) catId = 'youtube';
-                else if (rawCat.includes('telegram') || rawCat.includes('tg')) catId = 'telegram';
-                else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
-                else if (rawCat.includes('canva')) catId = 'canva_premium';
-                else if (rawCat.includes('freefire') || rawCat.includes('fire')) catId = 'freefire';
-                else {
-                    catId = rawCat.replace(/[^a-z0-9]/g, '_');
-                    if(!coreCategoriesConfig[catId]) {
-                        coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-solid fa-cube', color: 'bg-slate-700' };
-                    }
-                }
-
-                return {
-                    id: 'api_' + item.service,
-                    name: item.name,
-                    price: finalPriceBdt,
-                    stock: 99999, 
-                    category: catId,
-                    calcMode: 'smm', 
-                    apiId: item.service,
-                    cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
-                };
-            });
-            refreshUserViewport();
-        }
-
         async function fetchMainPanelServices() {
+            // Live synchronizing parameters read dynamically
+            dollarRate = parseFloat(localStorage.getItem('gz_dollar_rate')) || 120.0;
+            profitMargin = parseFloat(localStorage.getItem('gz_profit_margin')) || 20.0;
+
             try {
                 let res = await fetch('/api/get-services');
                 if (res.ok) {
                     let data = await res.json();
                     if (Array.isArray(data)) {
-                        apiServicesRaw = data; // র ডেটা সেভ রাখা হলো
-                        processApiServices();
+                        apiServices = data.map(item => {
+                            let rawUsdPrice = parseFloat(item.rate); 
+                            let costInBdt = rawUsdPrice * dollarRate;
+                            let finalPriceBdt = Math.ceil(costInBdt + (costInBdt * (profitMargin / 100)));
+
+                            let rawCat = item.category.toLowerCase();
+                            let catId = 'other';
+                            if (rawCat.includes('tiktok')) catId = 'tiktok';
+                            else if (rawCat.includes('facebook') || rawCat.includes('fb')) catId = 'facebook';
+                            else if (rawCat.includes('instagram') || rawCat.includes('ig')) catId = 'instagram';
+                            else if (rawCat.includes('youtube') || rawCat.includes('yt')) catId = 'youtube';
+                            else if (rawCat.includes('telegram') || rawCat.includes('tg')) catId = 'telegram';
+                            else if (rawCat.includes('twitter') || rawCat.includes('x-')) catId = 'twitter';
+                            else {
+                                catId = rawCat.replace(/[^a-z0-9]/g, '_');
+                                if(!coreCategoriesConfig[catId]) {
+                                    coreCategoriesConfig[catId] = { name: item.category, icon: 'fa-cube', color: 'bg-slate-700' };
+                                }
+                            }
+
+                            return {
+                                id: 'api_' + item.service,
+                                name: item.name,
+                                price: finalPriceBdt,
+                                stock: 99999, 
+                                category: catId,
+                                calcMode: 'smm', 
+                                apiId: item.service,
+                                cover: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=400'
+                            };
+                        });
                     }
                 }
             } catch (err) { console.error("Error syncing API: ", err); }
+            refreshUserViewport();
         }
+
+        // WALLETS IMAGE UPLOADS AND BASE64 CORE CONVERTERS
+        let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
+        let walletLogos = JSON.parse(localStorage.getItem('gz_wallet_logos')) || { 
+            bKash: "https://i.postimg.cc/mD8Fw0Zf/bkash.png", 
+            Nagad: "https://i.postimg.cc/65Y7fBf6/nagad.png", 
+            Rocket: "https://i.postimg.cc/2ytYfXz6/rocket.png", 
+            Upay: "https://i.postimg.cc/0jXmYg1M/upay.png" 
+        };
+
+        let cacheBkashImg = walletLogos.bKash, cacheNagadImg = walletLogos.Nagad, cacheRocketImg = walletLogos.Rocket, cacheUpayImg = walletLogos.Upay;
+
+        // Event listeners handling image files converting straight to Base64
+        document.getElementById('cfg-bkash-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheBkashImg = b64; }); });
+        document.getElementById('cfg-nagad-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheNagadImg = b64; }); });
+        document.getElementById('cfg-rocket-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheRocketImg = b64; }); });
+        document.getElementById('cfg-upay-img').addEventListener('change', function(e){ readLogoFile(e.target.files[0], function(b64){ cacheUpayImg = b64; }); });
+
+        function readLogoFile(file, callback) {
+            if(!file) return;
+            let reader = new FileReader();
+            reader.onload = function(evt) { callback(evt.target.result); };
+            reader.readAsDataURL(file);
+        }
+
+        window.commitAdminWallets = function() {
+            walletNumbers.bKash = document.getElementById('cfg-bkash').value.trim();
+            walletNumbers.Nagad = document.getElementById('cfg-nagad').value.trim();
+            walletNumbers.Rocket = document.getElementById('cfg-rocket').value.trim();
+            walletNumbers.Upay = document.getElementById('cfg-upay').value.trim();
+
+            walletLogos.bKash = cacheBkashImg;
+            walletLogos.Nagad = cacheNagadImg;
+            walletLogos.Rocket = cacheRocketImg;
+            walletLogos.Upay = cacheUpayImg;
+
+            localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
+            localStorage.setItem('gz_wallet_logos', JSON.stringify(walletLogos));
+            
+            // Instantly notifies all tabs/users on the network of systemic adjustments
+            localStorage.setItem('gz_live_ping', Date.now());
+            alert("✅ Gateways numbers and images updated successfully!");
+            refreshUserViewport();
+        };
+
+        // GLOBAL PRICING REALTIME COMMIT METHOD
+        window.commitApiPricingSettings = function() {
+            let rateInput = document.getElementById('cfg-dollar-rate').value;
+            let marginInput = document.getElementById('cfg-profit-margin').value;
+            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন ভাই!");
+            
+            localStorage.setItem('gz_dollar_rate', parseFloat(rateInput));
+            localStorage.setItem('gz_profit_margin', parseFloat(marginInput));
+            localStorage.setItem('gz_live_ping', Date.now()); // Real-time pulse trigger
+            
+            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ হয়েছে!");
+            fetchMainPanelServices(); 
+        };
+
+        // WINDOW CROSS-TAB LISTENER FOR MULTIUSER SECONDS SYNC
+        window.addEventListener('storage', function(e) {
+            if(e.key === 'gz_live_ping' || e.key === 'gz_dollar_rate' || e.key === 'gz_profit_margin' || e.key === 'gz_wallet_logos') {
+                fetchMainPanelServices();
+            }
+        });
 
         function persistPlatformStorage() {
             localStorage.setItem('gz_services', JSON.stringify(manualServices));
@@ -469,72 +522,14 @@
             localStorage.setItem('gz_orders', JSON.stringify(orders));
             localStorage.setItem('gz_users', JSON.stringify(users));
             localStorage.setItem('gz_active_user', JSON.stringify(activeUser));
-            localStorage.setItem('gz_wallets', JSON.stringify(walletNumbers));
-            generateSyncCode();
             refreshUserViewport();
         }
-
-        function generateSyncCode() {
-            try {
-                let packet = { r: dollarRate, m: profitMargin };
-                let enc = btoa(JSON.stringify(packet));
-                let outField = document.getElementById('sync-code-output');
-                if(outField) outField.value = enc;
-            } catch(e){}
-        }
-
-        window.copySyncCode = function() {
-            let outField = document.getElementById('sync-code-output');
-            if(outField && outField.value) {
-                navigator.clipboard.writeText(outField.value);
-                alert("📋 সিঙ্ক কোড কপি করা হয়েছে!");
-            }
-        };
-
-        window.importSyncCode = function() {
-            let inp = document.getElementById('sync-code-input').value.trim();
-            if(!inp) return alert("দয়া করে আগে সিঙ্ক কোড দিন!");
-            try {
-                let dec = JSON.parse(atob(inp));
-                if(dec.r && dec.m) {
-                    dollarRate = parseFloat(dec.r);
-                    profitMargin = parseFloat(dec.m);
-                    localStorage.setItem('gz_dollar_rate', dollarRate);
-                    localStorage.setItem('gz_profit_margin', profitMargin);
-                    alert("⚡ রেট ও প্রফিট মার্জিন সফলভাবে ইম্পোর্ট হয়েছে!");
-                    processApiServices(); // লাইভ রি-ক্যালকুলেশন
-                } else { alert("ভুল কোড দিয়েছেন ভাই!"); }
-            } catch(e) { alert("কোডটি রিড করা সম্ভব হয়নি!"); }
-        };
-
-        // ⚙️ প্রফিট এবং ডলার রেট লাইভ আপডেট মেকানিজম (FIXED)
-        window.commitApiPricingSettings = function() {
-            let rateInput = document.getElementById('cfg-dollar-rate').value;
-            let marginInput = document.getElementById('cfg-profit-margin').value;
-            if(!rateInput || !marginInput) return alert("সঠিক তথ্য দিন ভাই!");
-            
-            // ১. ভ্যালু আপডেট
-            dollarRate = parseFloat(rateInput);
-            profitMargin = parseFloat(marginInput);
-            
-            // ২. লোকাল স্টোরেজে সেভ
-            localStorage.setItem('gz_dollar_rate', dollarRate);
-            localStorage.setItem('gz_profit_margin', profitMargin);
-            
-            // ৩. লাইভ থাকা এপিআই সার্ভিসের প্রাইস সাথে সাথে রি-ক্যালকুলেট করা
-            processApiServices(); 
-            generateSyncCode();
-            
-            alert("⚙️ লাভ ও এক্সচেঞ্জ রেট সফলভাবে সেভ এবং লাইভ আপডেট হয়েছে!");
-        };
 
         window.triggerGlobalSearch = function(val) {
             searchQueryStr = val.trim().toLowerCase();
             let clearBtn = document.getElementById('search-clear-btn');
-            if(clearBtn) {
-                if(searchQueryStr) clearBtn.classList.remove('hidden');
-                else clearBtn.classList.add('hidden');
-            }
+            if(searchQueryStr) clearBtn.classList.remove('hidden');
+            else clearBtn.classList.add('hidden');
             refreshUserViewport();
         };
 
@@ -552,6 +547,10 @@
 
         window.openModal = function(id) { document.getElementById(id).classList.add('active'); };
         window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); };
+        window.toggleAuthFrames = function(viewMode) {
+            document.getElementById('login-module-box').classList.toggle('hidden', !viewMode);
+            document.getElementById('signup-module-box').classList.toggle('hidden', viewMode);
+        };
 
         let cacheSrvBase64 = "";
         document.getElementById('srv-img').addEventListener('change', function(e) { let f = e.target.files[0]; if(f) { let r = new FileReader(); r.onload=function(ev){cacheSrvBase64=ev.target.result;}; r.readAsDataURL(f); } });
@@ -560,9 +559,14 @@
             const passKey = prompt("🔒 Enter Dashboard Admin Security Key:");
             if (passKey === "1357") { 
                 document.getElementById('admin-secured-panel').classList.remove('hidden');
-                document.getElementById('cfg-dollar-rate').value = dollarRate;
-                document.getElementById('cfg-profit-margin').value = profitMargin;
-                generateSyncCode();
+                document.getElementById('cfg-dollar-rate').value = localStorage.getItem('gz_dollar_rate') || dollarRate;
+                document.getElementById('cfg-profit-margin').value = localStorage.getItem('gz_profit_margin') || profitMargin;
+                
+                document.getElementById('cfg-bkash').value = walletNumbers.bKash;
+                document.getElementById('cfg-nagad').value = walletNumbers.Nagad;
+                document.getElementById('cfg-rocket').value = walletNumbers.Rocket;
+                document.getElementById('cfg-upay').value = walletNumbers.Upay;
+
                 document.getElementById('admin-secured-panel').scrollIntoView({ behavior: 'smooth' });
                 refreshUserViewport();
             } else { alert("🛑 Authentication Failed."); }
@@ -587,13 +591,21 @@
 
         let orders = JSON.parse(localStorage.getItem('gz_orders')) || [];
         let users = JSON.parse(localStorage.getItem('gz_users')) || [];
-        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || { name: "Guest Admin", email: "admin@growzio.com" };
-        let walletNumbers = JSON.parse(localStorage.getItem('gz_wallets')) || { bKash: "01931xxxxxx", Nagad: "01931xxxxxx", Rocket: "01931xxxxxx", Upay: "01931xxxxxx" };
+        let activeUser = JSON.parse(localStorage.getItem('gz_active_user')) || null;
         let currentActiveItem = null; let chosenPaymentGateway = "";
 
         window.launchPaymentGateway = function(id) {
+            if(!activeUser) { alert("🔒 Please log in first."); openModal('auth-modal'); return; }
             currentActiveItem = apiServices.find(s => s.id === id) || manualServices.find(s => s.id === id) || books.find(b => b.id === id);
             if(!currentActiveItem) return;
+            
+            // Local dynamic images mapping onto UI elements safely
+            let activeLogos = JSON.parse(localStorage.getItem('gz_wallet_logos')) || walletLogos;
+            document.getElementById('modal-img-bkash').src = activeLogos.bKash;
+            document.getElementById('modal-img-nagad').src = activeLogos.Nagad;
+            document.getElementById('modal-img-rocket').src = activeLogos.Rocket;
+            document.getElementById('modal-img-upay').src = activeLogos.Upay;
+            
             document.getElementById('gate-target-address').value = ""; document.getElementById('gate-trxid-value').value = "";
             document.getElementById('step1-item-name').innerText = currentActiveItem.name || currentActiveItem.title;
             if(currentActiveItem.calcMode === 'smm') {
@@ -624,7 +636,10 @@
         window.goBackToStepTwo = function() { toggleGatewayStep(2); };
         window.finalizeWithWallet = function(wb) {
             chosenPaymentGateway = wb; document.getElementById('gate-brand-title').innerText = wb + " Payment";
-            document.getElementById('gate-display-num').innerText = walletNumbers[wb];
+            
+            let currentNums = JSON.parse(localStorage.getItem('gz_wallets')) || walletNumbers;
+            document.getElementById('gate-display-num').innerText = currentNums[wb];
+            
             let qty = parseInt(document.getElementById('gate-qty-counter').value) || 1;
             let finalPrice = (currentActiveItem.calcMode === 'smm') ? (currentActiveItem.price * qty) / 1000 : currentActiveItem.price * qty;
             document.getElementById('gate-display-amt').innerText = `${Math.ceil(finalPrice)} BDT`; toggleGatewayStep(3);
@@ -641,14 +656,24 @@
             orders.push({ id: orderId, userEmail: activeUser.email, userName: activeUser.name, itemId: currentActiveItem.id, itemName: currentActiveItem.name || currentActiveItem.title, target: targetAddr, qty: finalQty, method: chosenPaymentGateway, trxId: trx, status: 'Pending' });
             persistPlatformStorage();
 
-            alert("ℹ️ অর্ডার সফলভাবে সাবমিট হয়েছে!");
+            if(currentActiveItem.apiId) {
+                try {
+                    let response = await fetch('/api/place-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ service: currentActiveItem.apiId, link: targetAddr, quantity: finalQty }) });
+                    let result = await response.json();
+                    if(response.ok && result.success) { alert(`✅ সফল অর্ডার! API ID: ${result.orderId}`); }
+                } catch (e) {}
+            } else { alert("ℹ️ ম্যানুয়াল অর্ডার সেভ হয়েছে!"); }
             closeModal('payment-gateway-modal');
         };
+
+        window.deleteServiceNode = function(id) { manualServices = manualServices.filter(s => s.id !== id); persistPlatformStorage(); };
 
         function refreshUserViewport() {
             if(activeUser) {
                 document.getElementById('auth-zone').classList.add('hidden'); document.getElementById('profile-zone').classList.remove('hidden');
                 document.getElementById('profile-name').innerText = `👤 ${activeUser.name}`; document.getElementById('user-tracking-section').classList.remove('hidden');
+            } else {
+                document.getElementById('auth-zone').classList.remove('hidden'); document.getElementById('profile-zone').classList.add('hidden'); document.getElementById('user-tracking-section').classList.add('hidden');
             }
 
             let allServices = [...manualServices, ...apiServices];
@@ -657,14 +682,14 @@
             if(books.length > 0 && !activeCategoriesInSystem.includes('books')) activeCategoriesInSystem.push('books');
 
             document.getElementById('dynamic-avatar-category-bar').innerHTML = activeCategoriesInSystem.map(catKey => {
-                let conf = coreCategoriesConfig[catKey] || { name: catKey.toUpperCase().replace('_',' '), icon: 'fa-solid fa-cube', color: 'bg-gray-800' };
+                let conf = coreCategoriesConfig[catKey] || { name: catKey.toUpperCase(), icon: 'fa-cube', color: 'bg-gray-800' };
                 let isSel = currentFilterCategory === catKey;
                 return `
                 <div onclick="filterContentByCategory('${catKey}')" class="category-avatar-btn ${isSel ? 'active-cat' : ''}">
                     <div class="icon-box ${conf.color}">
                         <i class="${conf.icon}"></i>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-400 truncate max-w-[72px] text-center">${conf.name}</span>
+                    <span class="text-[10px] font-bold text-gray-400 truncate max-w-[68px] text-center">${conf.name}</span>
                 </div>`;
             }).join('');
 
@@ -690,7 +715,7 @@
             document.getElementById('section-services').style.display = (currentFilterCategory === 'books' && !searchQueryStr) ? "none" : "block";
             document.getElementById('section-books').style.display = (currentFilterCategory !== 'all' && currentFilterCategory !== 'books') ? "none" : "block";
 
-            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ কোনো সার্ভিস খুঁজে পাওয়া যায়নি ভাই!</div>` : filteredServices.map(s => {
+            document.getElementById('services-container').innerHTML = filteredServices.length === 0 ? `<div class="col-span-full py-8 text-center text-xs text-gray-600 font-mono">⚠️ কোনো সার্ভিস বা আইডি খুঁজে পাওয়া যায়নি ভাই!</div>` : filteredServices.map(s => {
                 let isSmm = (s.calcMode === 'smm'); let isApiNode = s.id.startsWith('api_');
                 return `
                 <div class="theme-bg border rounded-2xl p-4 flex flex-col justify-between relative">
